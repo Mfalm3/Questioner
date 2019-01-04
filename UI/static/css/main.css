@@ -16,8 +16,70 @@ ul{
   padding: 10px;
   width: 90%;
 }
+input{
+  line-height: 2em;
+  border: 1px solid black;
+  padding-left: 5px;
+  margin: 8px;
+}
+
+input:focus{
+  line-height: 2em;
+  border: 1px solid #1C3341;
+}
+
+.buttonz{
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.buttonz:hover{
+    box-shadow: 2px 2px 3px gray;
+    transform: scale(1.01);
+    color: white;
+}
+.buttonz-primary:hover{
+    background-color: #2e6da4;
+}
+.buttonz-primary{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+}
+.buttonz-info{
+    color: #fff;
+    background-color: #5bc0de;
+    border-color: #46b8da;
+}
+.buttonz-alert{
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+.buttonz-success{
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+.wrap{
+  margin: 10px;
+}
+.labels::after{
+  content: ':';
+  margin: 10px;
+}
     /*Mobile View*/
-@media only screen and (max-width : 480px) {
+@media only screen and (max-width : 388px) {
 .container{
   margin: auto;
   padding: 10px;
@@ -32,6 +94,16 @@ ul{
     border-radius: 19px;
     border: 1px solid;
     margin: 10px;
+  }
+  .auth fieldset{
+    margin-top: 200px;
+    width: 80%;
+    display: inline-block;
+  }
+  .auth{
+    text-align: center;
+    margin-left: 0% !important;
+    margin-top: 20px !important;
   }
 }
 @media only screen and (max-width: 600px) {
@@ -49,6 +121,15 @@ ul{
       border-radius: 19px;
       border: 1px solid;
       margin: 10px;
+    }
+    .auth fieldset{
+      width: 80%;
+      display: inline-block;
+    }
+    .auth{
+      text-align: center;
+      margin-left: 0%;
+      margin-top: 145px;
     }
 }
 
@@ -70,6 +151,15 @@ ul{
   .box img {
     max-width: 300px;
   }
+  .auth fieldset{
+    width: 80%;
+    display: inline-block;
+  }
+  .auth{
+    text-align: center;
+    margin-top: 130px !important;
+    margin-left: 0 !important;
+  }
 }
     /* Large devices (laptops/desktops, 854px and up) */
 @media only screen and (min-width: 854px) and (max-width: 1200px) {
@@ -89,6 +179,10 @@ ul{
   .box img {
     max-width: 300px;
   }
+  .auth{
+    margin-top: 130px;
+    margin-left: 0 !important;
+  }
 }
 
     /* Extra large devices (large laptops and desktops, 1200px and up) */
@@ -105,6 +199,10 @@ ul{
   }
   .box img {
     max-width: 300px;
+  }
+  .auth{
+    margin-top: 145px;
+    width: 55%;
   }
 }
 
@@ -200,6 +298,21 @@ header nav{
 
 #catalogue .box img{
   width: 400px;
+}
+    /* main*/
+.main{
+  margin-top: 8%;
+  height: 600px;
+}
+
+    /*Auth*/
+.auth fieldset{
+  width: 80%;
+  display: inline-block;
+}
+.auth{
+  text-align: center;
+  margin-left: 25%;
 }
 
     /*Footer*/
