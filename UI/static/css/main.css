@@ -27,6 +27,10 @@ input:focus{
   line-height: 2em;
   border: 1px solid #1C3341;
 }
+textarea{
+  overflow: auto;
+  resize: none;
+}
 
 a{
   text-decoration: none;
@@ -75,6 +79,9 @@ a{
     background-color: #5cb85c;
     border-color: #4cae4c;
 }
+.center{
+  text-align: center;
+}
 .wrap{
   margin: 10px;
 }
@@ -121,6 +128,12 @@ a{
   }
   main{
     margin-top: 150px !important; 
+  }
+  textarea#question{
+        width: 85%!important;
+  }
+  input#question-brief{
+        width: 85%!important;
   }
 }
 /*@media only screen and (max-width : 388px) {
@@ -243,7 +256,30 @@ a{
     text-align: center !important;
     list-style: none !important;
   }
+  .meta{
+  width: 100% !important;
+  }
+  .meta-elements{
+    width: 100% !important;
+    float: none !important;
+    text-align: center;
+  }
+  #meetup-img img {
+    width: 90% !important;
+  }
 }
+
+@media only screen and (max-width: 1100px){
+  #user-avatar, #user-avatar img{
+  display: none;
+}
+.righter{
+    float: none;
+    width: 100%;
+    /*border: 1px solid;*/
+}
+}
+
     /* Large devices (laptops/desktops, 854px and up) */
 @media only screen and (min-width: 854px) and (max-width: 1200px) {
   .container{
@@ -291,7 +327,7 @@ a{
 
     /*Header*/
 
-header{
+header#top-bar{
   background: #fff;
   color: #000;
   min-height: 65px;
@@ -300,35 +336,36 @@ header{
   position: fixed;
   top: 0;
   width: 100%;
+  z-index: 2;
 }
 
-header a{
+header#top-bar a{
   text-decoration: none;
   color: #D6346B;
   font-size: 15px;
   text-transform: uppercase;
 }
 
-header a:hover {
+header#top-bar a:hover {
  color: #00b19a;
  text-shadow: 2px 2px 2px white;
 }
 
-header li{
+header#top-bar li{
   display: inline;
   padding: 0 15px 0 15px;
   float: left;
 }
 
-header #brand{
+header#top-bar #brand{
   float: left;
 }
 
-header #brand h4{
+header#top-bar #brand h4{
   margin: 0;
 }
 
-header nav{
+header#top-bar nav{
   float: right;
 }
 
@@ -461,6 +498,93 @@ header nav{
   }
 
 
+    /*MeetUP*/
+#meetup-img{
+  width: 100%;
+  text-align: center;
+  z-index: 20;
+}
+#meetup-img img{
+  width:50%;
+  max-height: 250px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 2px 2px black;
+
+}
+#meetup-info{
+  width: 100%;
+}
+#meetup-info{
+  padding-top: 80px;
+  margin-top: -80px;
+  border-top: 1px solid;
+  overflow: hidden;
+  padding-bottom: 15px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 2px 2px grey;
+}
+#meetup-desc h3, #meetup-desc p{
+  text-align: center;
+}
+.meta{
+  width: 40%;
+  margin: auto;
+}
+.meta-elements{
+  width: 50%;
+  float: left;
+  text-align: center;
+}
+#meetup-questions{
+  width: 80%;
+  overflow: hidden;
+  margin: auto;
+}
+.posted{
+  overflow: hidden;
+}
+.posted h4{
+  text-align: center;
+}
+#user-avatar{
+  width: 15%;
+  height: 187px;
+  /*border: 1px solid;*/
+  float: left;
+  max-height: 187px;
+}
+#user-avatar img{
+  height: 100px;
+  width: 100px;
+  top: 25%;
+  left: 25%;
+  position: relative;
+}
+.righter{
+    float: left;
+    width: 84%;
+    /*border: 1px solid;*/
+}
+#user-avatar img{
+  border-radius: 50px;
+}
+.posted{
+  border: 1px solid;
+  overflow: hidden;
+  margin: 10px;
+  width: 95%;
+  padding: 15px;
+}
+.posted #question-title, .posted #question-desc{
+  padding-left: 10px;
+  margin-bottom: 20px;
+}
+input#question-brief{
+    margin: auto;
+    display: block;
+    /* min-width: 460px; */
+    max-width: 460px;
+}
 
     /*Footer*/
 footer{
