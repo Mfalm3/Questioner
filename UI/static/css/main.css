@@ -28,6 +28,10 @@ input:focus{
   border: 1px solid #1C3341;
 }
 
+a{
+  text-decoration: none;
+}
+
 .buttonz{
     display: inline-block;
     padding: 6px 12px;
@@ -91,12 +95,37 @@ input:focus{
   border: 2px solid;
 }
     /*Mobile View*/
-@media only screen and (max-width : 388px) {
-  h3 {
-    font-size: 1em !important;
+@media only screen and (max-width : 590px) {
+.container{
+    width: 100% !important;
+  }
+  header ul li{
+    width: 100% !important;
+    text-align: center !important;
+    padding: 2px 0 2px 0 !important;
+  }
+  header #brand h4 a{
+    font-weight: bold !important;
+    font-size: 1.1em !important;
+  }
+  header #brand{
+    width: 100% !important;
+    text-align: center !important;
+  }
+  header nav{
+    width: 100% !important;
+  }
+  .avatar{
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
   main{
-    margin-top: 50% !important;
+    margin-top: 150px !important; 
+  }
+}
+/*@media only screen and (max-width : 388px) {
+  h3 {
+    font-size: 1em !important;
   }
   .container{
     width: 100% !important;
@@ -141,7 +170,7 @@ input:focus{
     margin-left: auto;
     margin-right: auto;
   }
-}
+}*/
 @media only screen and (max-width: 600px) {
   .container{
     margin: auto;
@@ -193,7 +222,7 @@ input:focus{
   }
   .auth{
     text-align: center;
-    margin-top: 130px !important;
+    margin-top: 45px !important;
     margin-left: 0 !important;
   }
   .card-sections{
@@ -206,7 +235,14 @@ input:focus{
   .profile-section h3, .profile-section p{
     text-align: center;
   }
- 
+  #meetups, #top-questions{
+    float: none !important;
+    width: 100% !important;
+  }
+  #meetups ol, #top-questions ul{
+    text-align: center !important;
+    list-style: none !important;
+  }
 }
     /* Large devices (laptops/desktops, 854px and up) */
 @media only screen and (min-width: 854px) and (max-width: 1200px) {
@@ -352,7 +388,7 @@ header nav{
     /* Main*/
 
 .main{
-  margin-top: 5%;
+  margin-top: 100px;
   min-height: 600px;
 }
 
@@ -369,7 +405,7 @@ header nav{
     /*Profile*/
 
 #card{
-  min-height: 500px;
+  min-height: 300px;
   overflow: hidden;
   clear: both;
 }
@@ -404,6 +440,26 @@ header nav{
   background: url('../img/avatar.png') no-repeat 50% 0;
   background-size: contain;
 }
+#feed{
+  overflow: hidden;
+}
+#meetups, #top-questions{
+  float: left;
+  width: 50%;
+}
+#meetups h3, #top-questions h3{
+  text-align: center; 
+}
+#meetups a, #top-questions a{
+  color: #D6346B;
+}
+#meetups a:hover, #top-questions a:hover{
+  color: #00b19a;
+}
+#meetups li, #top-questions li{
+  padding: 10px;
+  }
+
 
 
     /*Footer*/
