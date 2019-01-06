@@ -15,3 +15,22 @@ window.onclick = function(e) {
 		return false;
 	}
 }
+
+function deleter(){
+
+	if(confirm("Are you sure you want to delete this meetup?")){
+
+		if(confirm("Are you really sure you want to delete this meetup?")){
+			let box = document.querySelector('.buttonz-alert').parentNode.closest('.box');
+			box.remove();
+			setTimeout(()=>{ alert("Meet up deleted successfully!"); }, 100);
+		}else{
+			return false;
+		}
+ 	
+ 	}else{
+ 		return false;
+ 	}
+	
+	
+}

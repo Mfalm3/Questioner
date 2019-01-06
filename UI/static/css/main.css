@@ -1,5 +1,7 @@
     /*Global Params*/
-
+html{
+  min-height: 100%;
+}
 body{
   background: #f4f4f4;
   padding: 0;
@@ -8,7 +10,9 @@ body{
 }
 
 * {-webkit-font-smoothing: antialiased;}
-
+.wrapper{
+  min-height: 100%;
+}
 ul{
   margin: 0;
   padding: 0;
@@ -252,16 +256,13 @@ a{
   }
   .box{
     padding: 10px;
-    width: 100% !important;
+    width: 90% !important;
     min-height: 600px;
     float: left;
     text-align: center;
     border-radius: 19px;
     border: 1px solid;
     margin: 10px;
-  }
-  .box img {
-    max-width: 300px;
   }
   .auth fieldset{
     width: 80%;
@@ -340,9 +341,6 @@ a{
     border: 1px solid;
     margin: 10px;
   }
-  .box img {
-    max-width: 300px;
-  }
   .auth{
     margin-top: 130px;
     margin-left: 0 !important;
@@ -360,9 +358,6 @@ a{
     border-radius: 19px;
     border: 1px solid;
     margin: 10px;
-  }
-  .box img {
-    max-width: 300px;
   }
   .auth{
     margin-top: 145px;
@@ -464,8 +459,10 @@ header#top-bar nav{
   box-shadow: 1px 1px 1px 1px grey;
 }
 
-#catalogue .box img{
-  width: 400px;
+#catalogue .box img {
+    max-width: 100%;
+    height: auto;
+    width: auto\9; /* ie8 */
 }
     /* Main*/
 
@@ -490,11 +487,13 @@ header#top-bar nav{
   min-height: 600px;
   float: left;
   border-right: 2px solid crimson;
+  position: fixed;
 }
 .dashboard-manage{
-    overflow: hidden;
-    width: 68%;
-    float: left;
+  overflow: hidden;
+  width: 68%;
+  float: left;
+  margin-left: 30%;
 }
 .dashboard-avi .adm-avi{
   max-width: 200px;
@@ -786,7 +785,7 @@ textarea#comment{
 
     /*Footer*/
 footer{
-  margin-top: 20px;
+  margin-top: -10px;
   padding: 20px;
   text-align: center;
   background: linear-gradient(#1C3341, #008773);
