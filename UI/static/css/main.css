@@ -173,6 +173,9 @@ a{
   .new-m.c{
     width: 80%;
   }
+  .posted{
+    width: 80% !important;
+  }
 }
 /*@media only screen and (max-width : 388px) {
   h3 {
@@ -690,6 +693,9 @@ header#top-bar nav{
   width: 5px;
   margin-top: -20px;
 }
+.meta-elements i.fas{
+  color: #D6346B;
+}
 
 #meetup-questions{
   width: 80%;
@@ -722,7 +728,7 @@ header#top-bar nav{
   border: 1px solid;
   overflow: hidden;
   margin: 10px;
-  width: 95%;
+  width: 90%;
   padding: 15px;
 }
 .posted h4{
@@ -738,7 +744,7 @@ header#top-bar nav{
 input#question-brief{
     margin: auto;
     display: block;
-    /* min-width: 460px; */
+     /*min-width: 460px; */
     max-width: 460px;
 }
 button.vote-up{
