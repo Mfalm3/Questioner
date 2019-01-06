@@ -17,27 +17,41 @@ ul{
   margin: auto;
   padding: 10px;
   width: 90%;
+  overflow: hidden;
 }
 input{
   line-height: 2em;
-  border: 1px solid black;
+  border: 1px solid gray;
   padding-left: 5px;
   margin: 8px;
+  border-radius: 5px; 
 }
 
 input:focus{
   line-height: 2em;
-  border: 1px solid #1C3341;
+  border: 1px solid crimson !important;
+  border-radius: 5px; 
 }
 textarea{
   overflow: auto;
   resize: none;
+  border-radius: 5px;
+  border: 1px solid gray;
+  padding: 20px; 
+}
+textarea:focus{
+  border: 1px solid crimson !important;
 }
 
 a{
   text-decoration: none;
 }
-
+.fr{
+  float: right;
+}
+.fl{
+  float: left;
+}
 .buttonz{
     display: inline-block;
     padding: 6px 12px;
@@ -57,6 +71,10 @@ a{
     box-shadow: 2px 2px 3px gray;
     transform: scale(1.01);
     color: white;
+}
+.buttonz-lg{
+  height: 100px;
+  width: 200px;
 }
 .buttonz-primary:hover{
     background-color: #2e6da4;
@@ -139,7 +157,17 @@ a{
   }
   textarea#comment.collapsed{
     width: 80%;
-    padding: 20px;
+  }
+  #new-meetup.collapse{
+    float: none;
+    text-align: center;
+    width: 100%;
+  }
+  #modalCreate.down {
+    top: 100px;
+  }
+  .new-m.c{
+    width: 80%;
   }
 }
 /*@media only screen and (max-width : 388px) {
@@ -272,6 +300,17 @@ a{
   }
   #meetup-img img {
     width: 90% !important;
+  }
+  .dashboard-avi.collapser{
+    float: none;
+    width: 100%;
+    border: none;
+    min-height: 350px;
+  }
+  .dashboard-manage.cl{
+    overflow: hidden;
+    width: 100%;
+    float: none;
   }
 }
 
@@ -444,9 +483,48 @@ header#top-bar nav{
   text-align: center;
   margin-left: 25%;
 }
+    /*Admin*/
+.dashboard-avi{
+  width: 30%;
+  overflow: hidden;
+  min-height: 600px;
+  float: left;
+  border-right: 2px solid crimson;
+}
+.dashboard-manage{
+    overflow: hidden;
+    width: 68%;
+    float: left;
+}
+.dashboard-avi .adm-avi{
+  max-width: 200px;
+  min-height: 200px;
+  border-radius: 100px;
+  border: 2px solid crimson;
+  margin: auto;
+  overflow: hidden;
+}
+.manager{
+  border-bottom: 2px solid crimson;
+}
+.tasker{
+  margin: 10px;
+}
+.emphasize{
+  font-size: 50px;
+  display: block;
+}
+.quote{
+  font-size: smaller;
+  font-style: italic;
+  margin: 2px;
+}
 
     /*Profile*/
-
+#new-meetup{
+  margin-bottom: 10px;
+  margin-right: 10px;
+}
 #card{
   min-height: 300px;
   overflow: hidden;
@@ -503,6 +581,61 @@ header#top-bar nav{
   padding: 10px;
   }
 
+#modalCreate {
+  display: none;
+  position: fixed;
+  z-index: 1; 
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4);
+}
+.modal-panel {
+  position: relative;
+  background-color: #fefefe;
+  margin: auto;
+  padding: 0;
+  border: 1px solid #888;
+  border-bottom: #D6346B 2px solid;
+  width: 80%;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+  -webkit-animation-name: dropTop;
+  -webkit-animation-duration: 0.4s;
+  animation-name: dropTop;
+  animation-duration: 0.4s
+}
+
+@-webkit-keyframes dropTop {
+  from {top:-300px; opacity:0} 
+  to {top:0; opacity:1}
+}
+
+@keyframes dropTop {
+  from {top:-300px; opacity:0}
+  to {top:0; opacity:1}
+}
+.close:hover, .close:focus {
+  color: #D6346B;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-header {
+  padding: 2px 16px;
+  text-align: center;
+  background: linear-gradient(#1C3341, #008773);
+  border-top: #D6346B 2px solid;
+  color: white;
+}
+
+.modal-body {padding: 2px 16px;}
+.new-m{
+  width: 50%;
+}
 
     /*MeetUP*/
 #meetup-img{
