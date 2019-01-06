@@ -530,11 +530,29 @@ header#top-bar nav{
   width: 40%;
   margin: auto;
 }
+.meta.post{
+  width: 80%;
+  margin: auto;
+}
 .meta-elements{
   width: 50%;
   float: left;
   text-align: center;
 }
+.meta-elements.info{
+  width: 33%;
+  float: left;
+  text-align: center;
+}
+.meta-elements.votes{
+  width: 15%;
+  margin-top: -15px;
+}
+.meta-elements.counter{
+  width: 5px;
+  margin-top: -20px;
+}
+
 #meetup-questions{
   width: 80%;
   overflow: hidden;
@@ -584,6 +602,20 @@ input#question-brief{
     display: block;
     /* min-width: 460px; */
     max-width: 460px;
+}
+button.vote-up{
+  background: url('../img/caret-arrow-up.png') no-repeat;
+  background-size: 50px 50px;
+  height: 50px;
+  width: 55px;
+  border: none;
+}
+button.vote-down{
+  background: url('../img/caret-down.png') no-repeat;
+  background-size: 50px 50px;
+  height: 50px;
+  width: 55px;
+  border: none;
 }
 
     /*Footer*/
