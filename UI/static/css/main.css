@@ -155,6 +155,11 @@ a{
   }
   textarea#question{
         width: 85%!important;
+        margin-top: 15px;
+  }
+  textarea#comment{
+        width: 85%!important;
+        margin-top: 15px;
   }
   input#question-brief{
         width: 85%!important;
@@ -470,6 +475,9 @@ header#top-bar nav{
     height: auto;
     width: auto\9; /* ie8 */
 }
+.box.management{
+  min-height: 440px !important;
+}
     /* Main*/
 
 .main{
@@ -565,6 +573,17 @@ header#top-bar nav{
   height: 300px;
   background: url('../img/avatar.png') no-repeat 50% 0;
   background-size: contain;
+}
+.avatarz{
+  border: 1px solid black;
+  height: 45px;
+  width: 45px;
+  border-radius: 50px;
+  text-align: center;
+  margin-top: 0px;
+}
+.head-top{
+  font-size: 2em; margin-top: 5px;
 }
 #feed{
   overflow: hidden;
