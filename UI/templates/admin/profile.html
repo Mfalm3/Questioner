@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+    <head>
+    	<meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Questioner | My Dashboard</title>
+        <meta name="description" content="Meetups that build">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/png" href="../../static/img/favicon-32x32.png" sizes="32x32" />
+    		<link rel="icon" type="image/png" href="../../static/img/favicon-16x16.png" sizes="16x16" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+        <link rel="stylesheet" href="../../static/css/main.css">
+  
+    </head>
+    <body>
+    	<header id="top-bar">
+        <div class="container">
+          <div id="brand">
+            <h4><a href="index.html">Questioner</a></h4>
+          </div>
+          <nav>
+            <ul>
+              <li>
+              	<a href="javascript:void;">
+              		<i class="fas fa-bell"></i>
+              		 Notifications
+          		</a>
+          	</li>
+              <li>
+              	<a href="javascript:void;">
+              		<i class="fas fa-cog"></i>
+              		 Settings
+          		</a>
+          	</li>
+              <li>
+              	<a href="javascript:void;">
+              		<div class="avatar">
+              			<i class="fas fa-user" style="font-size: 2em; margin-top: 5px;"></i>
+              		</div>
+              	</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
+    	<main class="main">
+        <section class="container">
+         
+         <div class="dashboard-avi collapser">
+            <div class="adm-avi">
+              <img src="http://i.pravatar.cc/200?img=3">
+            </div>
+            <h3 class="center">
+              <i class="fas fa-sign-in-alt"></i> 
+              Logged in as Administrator
+            </h3>
+
+            <p class="center quote">He who has great power has an even greater responsibilty</p>
+         </div>
+         
+        <div class="dashboard-manage cl">
+          <section class="manager center">
+            <!-- <div class="container btnz"> -->
+              <button class="buttonz buttonz-lg buttonz-primary tasker" id="new-meetup"><i class="fas fa-folder-plus emphasize"></i> <strong>Add New Meetups</strong></button>
+              <button class="buttonz buttonz-lg buttonz-info tasker" onclick='window.location="manage_meetups.html";'><i class="fas fa-sliders-h  emphasize"></i> <strong>Manage Meetups</strong></button>
+            <!-- </div> -->
+          </section>
+          <section id="feed">
+              <div class="container">
+                <div id="meetups">
+                  <h3>My Upcoming Meetups</h3>
+                  <ol>
+                    <li>
+                      <a href="#">Python Speak</a>
+                    </li>
+                    <li>
+                      <a href="#">Out and About</a>
+                    </li>
+                    <li>
+                      <a href="#">Nature's Secrets</a>
+                    </li>
+                    <li>
+                      <a href="#">Wordpress Workshops</a>
+                    </li>
+                  </ol>
+                </div>
+                <div id="top-questions">
+                  <h3>Top Questions</h3>
+                  <ul>
+                    <li>
+                      <a href="">How do you deploy a wordpress website that has been done locally?</a>
+                    </li>
+                    <li>
+                      <a href="">Python error `Could not import flask`</a>
+                    </li>
+                    <li>
+                      <a href="">What should you consider when buying a PC?</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section>
+          <div id="modalCreate" class="down">
+            <div class="modal-panel">
+              <div class="modal-header">
+                <span class="close fr">&times;</span>
+                <h3>Create new Meetup</h3>
+              </div>
+              <div class="modal-body">
+                <div class="container">
+                  <form>
+                    <div class="center">
+                      <div>
+                        <label for="title">
+                          <i class="fas fa-info-circle"></i> Meetup Name
+                        </label>
+                      </div>
+                      <div>
+                        <input type="text" class="new-m c">
+                      </div>
+                    </div>
+                    <div class="center">
+                      <div>
+                        <label for="title">
+                          <i class="fas fa-question-circle"></i> Meetup Description
+                        </label>
+                      </div>
+                      <div>
+                        <textarea class="new-m c" cols="50" rows="5"></textarea>
+                      </div>
+                    </div>
+                    <div class="center">
+                      <div>
+                        <label for="title">
+                          <i class="fas fa-calendar-alt"></i> Meetup Date
+                        </label>
+                      </div>
+                      <div>
+                        <input type="date" class="new-m c">
+                      </div>
+                    </div>
+                    <div class="center">
+                      <div>
+                        <label for="title">
+                          <i class="fas fa-map-marker-alt"></i> Meetup Location
+                        </label>
+                      </div>
+                      <div>
+                        <input type="text" class="new-m c">
+                      </div>
+                    </div>
+                    <div class="center"><button class="buttonz buttonz-primary">Add Meetup</button></div>
+                  </form>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+        
+      </main>
+    	<footer>
+        	<div class="container">
+          		<p>&copy; Waithaka 2019</p>
+        	</div>
+      </footer>
+        <script src="../../static/js/main.js"></script>
+    </body>
+</html>
