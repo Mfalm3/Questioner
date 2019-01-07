@@ -151,7 +151,7 @@ a{
     margin-right: auto !important;
   }
   main{
-    margin-top: 110px !important; 
+    margin-top: 150px !important;
   }
   textarea#question{
         width: 85%!important;
@@ -285,8 +285,10 @@ a{
     width: 100% !important;
     float: none;
   }
-  .profile-section{
-    width: 100% !important;
+  .profile-section#one,
+  .profile-section#two{
+    width: 100%;
+    min-height: 150px;
   }
   .profile-section h3, .profile-section p{
     text-align: center;
@@ -322,6 +324,13 @@ a{
     width: 100%;
     float: none;
     margin-left: 0;
+  }
+  .stats-section .ds{
+    max-height: 200px;
+  }
+  .avatarz{
+    margin-left: auto;
+    margin-right: auto;
   }
 
 }
