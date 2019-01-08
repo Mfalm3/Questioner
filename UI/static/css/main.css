@@ -150,8 +150,12 @@ a{
     margin-left: auto !important;
     margin-right: auto !important;
   }
-  main{
-    margin-top: 150px !important;
+  main.main{
+    margin-top: 175px !important;
+  }
+
+  main#index{
+    margin-top: 110px;
   }
   textarea#question{
         width: 85%!important;
@@ -427,6 +431,9 @@ header#top-bar #brand h4{
 
 header#top-bar nav{
   float: right;
+}
+p.logout{
+  display: inline;
 }
 
     /*Overlay*/
@@ -829,5 +836,4 @@ footer{
   text-align: center;
   background: linear-gradient(#1C3341, #008773);
   border-top: #D6346B 2px solid;
-
 }
