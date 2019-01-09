@@ -3,10 +3,12 @@ from flask import Blueprint, request, jsonify
 from app.api.v1.utils.validator import valid_email, email_exists, username_exists
 from app.db import init_db
 from app.api.v1.models.users_model import UsersModel
+from app.api.v1.models.meetups_model import MeetupsModel
 
 
 v1 = Blueprint('v1', __name__, url_prefix='/api/v1')
 user = UsersModel()
+m = MeetupsModel()
 user_db = init_db()
 
 
@@ -41,3 +43,13 @@ def signup():
 
     new_user = user.user_obj(fname=fname, lname=lname, password=password, othername=other_name, email=email, phone_number=phone, username=username, isAdmin=isAdmin)
     return user.save(new_user)
+
+
+@v1.route('/meetups/upcoming', methods=['GET'])
+def get_meetups():
+    """Get all meetups route."""
+    meetups = m.get_all()
+    return jsonify({
+        "status": 200,
+        "data": meetups
+    })
