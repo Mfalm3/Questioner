@@ -1,12 +1,14 @@
 language: python
-
-matrix:
-  include:
-    - python: 3.5
+python: 
+- 3.5.2
 
 install:
   - pip install requirements.txt
   - pip install pytest-cov
+  - pip install codeclimate-test-reporter
+
+env:
+  - FLASK_VERSION=1.0.2
 
 script:
   pytest --cov=app/
