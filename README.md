@@ -1,5 +1,10 @@
 # Questioner
 
+[![Build Status](https://travis-ci.org/Mfalm3/Questioner.svg?branch=develop)](https://travis-ci.org/Mfalm3/Questioner)
+[![Maintainability](https://api.codeclimate.com/v1/badges/d1288bf7e1e753038ced/maintainability)](https://codeclimate.com/github/Mfalm3/Questioner/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/d1288bf7e1e753038ced/test_coverage)](https://codeclimate.com/github/Mfalm3/Questioner/test_coverage)
+[![Coverage Status](https://coveralls.io/repos/github/Mfalm3/Questioner/badge.svg?branch=develop)](https://coveralls.io/github/Mfalm3/Questioner?branch=develop)
+
 Crowd-source questions for a meetup. Questioner helps the meetup organizer prioritize questions to be answered. Other users can vote on asked questions and they bubble to the top or bottom of the log
 
 ## Basic Features
