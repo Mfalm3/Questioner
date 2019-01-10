@@ -106,3 +106,15 @@ def upvote(question_id):
         "message": "Question upvoted successfully!",
         "question": updated_votes
     })
+
+
+@v1.route('/questions/<int:question_id>/downvote', methods=['PATCH'])
+def downvote(question_id):
+    """Downvote a specific question."""
+    query = q.get_question(question_id)
+    downvoted_votes = q.downvote(query)
+    return jsonify({
+        "status": 200,
+        "message": "Question downvoted successfully!",
+        "question": downvoted_votes
+    })
