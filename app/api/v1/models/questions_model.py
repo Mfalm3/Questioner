@@ -44,3 +44,9 @@ class QuestionModel(BaseModel):
         query = question
         query['votes'] += 1
         return query
+
+    def downvote(self, question):
+        """Downvote a question method."""
+        query = question
+        query['votes'] -= 1
+        return query
