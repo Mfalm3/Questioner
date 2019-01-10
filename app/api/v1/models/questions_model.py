@@ -33,3 +33,14 @@ class QuestionModel(BaseModel):
             "status": 201,
             "message": "Question posted successfully!"
         })
+
+    def get_question(self, question_id):
+        """Get a question method."""
+        query = self.db[question_id - 1]
+        return query
+
+    def upvote(self, question):
+        """Upvote a question method."""
+        query = question
+        query['votes'] += 1
+        return query
