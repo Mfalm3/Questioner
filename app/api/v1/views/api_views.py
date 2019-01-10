@@ -77,3 +77,20 @@ def post_question():
 
             query = q.question(title=title, body=body, meetup=meetup, author=createdBy, votes=0)
             return q.save(query)
+
+
+@v1.route('/meetups/<int:meetup_id>', methods=['GET'])
+def get_one(meetup_id):
+    """Get a specific meetup."""
+    meetup = meetup_id
+    if not int(meetup):
+        return jsonify({
+            "status": 400,
+            "error": "Wrong parameters supplied for the request"
+        }), 400
+    else:
+        resp = m.get_meetup(meetup)
+        return jsonify({
+            "status": 200,
+            "data": resp
+        }), 200
