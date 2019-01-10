@@ -4,11 +4,12 @@ from app.api.v1.utils.validator import valid_email, email_exists, username_exist
 from app.db import init_db
 from app.api.v1.models.users_model import UsersModel
 from app.api.v1.models.meetups_model import MeetupsModel
-
+from app.api.v1.models.questions_model import QuestionModel
 
 v1 = Blueprint('v1', __name__, url_prefix='/api/v1')
 user = UsersModel()
 m = MeetupsModel()
+q = QuestionModel()
 user_db = init_db()
 
 
@@ -53,3 +54,26 @@ def get_meetups():
         "status": 200,
         "data": meetups
     })
+
+
+@v1.route('/meetups', methods=['POST'])
+def post_question():
+    """Post a question route."""
+    data = request.json
+    required = ["title", "meetup", "body", "createdBy"]
+    if data is None:
+        return jsonify({"status": 400, "error": "Please provide the required fields. {}".format([field for field in required])})
+    for key, value in data.items():
+        if value is None or value == "":
+            return jsonify({
+                "status": 400,
+                "error": "{} is missing.".format(key)
+            })
+        else:
+            title = data.get("title")
+            meetup = data.get("meetup")
+            body = data.get("body")
+            createdBy = data.get("createdBy")
+
+            query = q.question(title=title, body=body, meetup=meetup, author=createdBy, votes=0)
+            return q.save(query)
