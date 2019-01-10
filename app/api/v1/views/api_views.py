@@ -94,3 +94,15 @@ def get_one(meetup_id):
             "status": 200,
             "data": resp
         }), 200
+
+
+@v1.route('/questions/<int:question_id>/upvote', methods=['PATCH'])
+def upvote(question_id):
+    """Upvote a specific question."""
+    query = q.get_question(question_id)
+    updated_votes = q.upvote(query)
+    return jsonify({
+        "status": 200,
+        "message": "Question upvoted successfully!",
+        "question": updated_votes
+    })
