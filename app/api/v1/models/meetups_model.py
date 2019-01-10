@@ -14,3 +14,8 @@ class MeetupsModel(BaseModel):
         """Get all meetups."""
         meetups = self.db
         return meetups
+
+    def get_meetup(self, meetup_id):
+        """Get a specific meetup."""
+        one_meetup = self.db[meetup_id - 1]
+        return one_meetup
