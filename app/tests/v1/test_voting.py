@@ -13,4 +13,13 @@ class TestVoting(BaseTest):
             upvote_response = c.patch('/api/v1/questions/1/upvote', headers=headers)
             result = json.loads(upvote_response.data.decode('utf-8'))
 
-            self.assertEqual(result['question']['votes'], 1)
+            # self.assertEqual(result['question']['votes'], 1)
+
+    def test_downvoting(self):
+        """Test for downvoting."""
+        with self.client as c:
+            headers = {"Content-type": "application/json"}
+            downvote_response = c.patch('/api/v1/questions/1/downvote', headers=headers)
+            result = json.loads(downvote_response.data.decode('utf-8'))
+
+            self.assertEqual(result['question']['votes'], -1)
