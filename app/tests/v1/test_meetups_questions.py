@@ -37,3 +37,12 @@ class TestMeetups(BaseTest):
 
             self.assertEqual(result['error'], "title is missing.")
             self.assertEqual(result['status'], 400)
+
+    def test_get_meetup(self):
+        """Testing for gettin a single meetup."""
+        with self.client as c:
+            headers = {"Content-type": "application/json"}
+            get_meetup = c.get('/api/v1/meetups/1', headers=headers)
+            result = json.loads(get_meetup.data.decode('utf-8'))
+
+            self.assertEqual(result['status'], 200)
