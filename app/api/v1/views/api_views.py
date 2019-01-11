@@ -1,7 +1,8 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, make_response
 from werkzeug.security import generate_password_hash, check_password_hash
 import datetime
 import jwt
+import json
 from app.api.v1.utils.validator import valid_email, email_exists, username_exists
 from app.db import init_db, user_db
 from app.api.v1.models.users_model import UsersModel
@@ -105,6 +106,66 @@ def login():
                 })
 
 
+@v1.route('/meetups', methods=['POST'])
+@requires_token
+def create_meetup(user):
+    if not user['isAdmin'] == "True":
+        return jsonify({
+            "status": 403,
+            "error": "Action requires Admin Priviledges"
+        }), 403
+    required = ["topic", "location", "happeningOn", "tags"]
+    try:
+        data = request.get_json()
+    except Exception:
+        return jsonify({
+            "status": 400,
+            "error": "Please provide the following fields. {}".format([item for item in required])
+        }), 400
+
+    topic = data.get('topic')
+    location = data.get('location')
+    images = data.get('images')
+    happeningOn = data.get('happeningOn')
+    tags = data.get('tags')
+    tag = tags.split(',')
+
+    if not topic:
+        return jsonify({
+            "status": 400,
+            "message": "{} is missing.".format(topic)
+        }), 400
+    if not location:
+        return jsonify({
+            "status": 400,
+            "message": "{} is missing.".format(location)
+        }), 400
+    if not happeningOn:
+        return jsonify({
+            "status": 400,
+            "message": "{} is missing.".format(happeningOn)
+        }), 400
+    if not tags:
+        return jsonify({
+            "status": 400,
+            "message": "{} is missing.".format(tags)
+        }), 400
+    else:
+        new_meetup = m.meetup(location=location, images=images, topic=topic, happeningOn=happeningOn, tags=tag)
+        meetup = m.create(new_meetup)
+        return jsonify({
+            "status": 201,
+            "message": "Meetup created successfully!",
+            "data": [
+                    {
+                        "topic": topic,
+                        "location": location,
+                        "happeningOn": happeningOn,
+                        "tags": tag
+                        }
+                    ]
+        }), 201
+
 @v1.route('/meetups/upcoming', methods=['GET'])
 def get_meetups():
     """Get all meetups route."""
@@ -115,7 +176,7 @@ def get_meetups():
     })
 
 
-@v1.route('/meetups', methods=['POST'])
+@v1.route('/questions', methods=['POST'])
 def post_question():
     """Post a question route."""
     data = request.json
