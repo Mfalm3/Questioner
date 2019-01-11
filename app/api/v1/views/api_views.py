@@ -1,16 +1,21 @@
 from flask import Blueprint, request, jsonify
-
+from werkzeug.security import generate_password_hash, check_password_hash
+import datetime
+import jwt
 from app.api.v1.utils.validator import valid_email, email_exists, username_exists
-from app.db import init_db
+from app.db import init_db, user_db
 from app.api.v1.models.users_model import UsersModel
 from app.api.v1.models.meetups_model import MeetupsModel
 from app.api.v1.models.questions_model import QuestionModel
+from app.api.v1.utils.utils import requires_token
+from instance.config import key as enc_key
+
 
 v1 = Blueprint('v1', __name__, url_prefix='/api/v1')
 user = UsersModel()
 m = MeetupsModel()
 q = QuestionModel()
-user_db = init_db()
+user_db = init_db(user_db)
 
 
 @v1.route('/signup', methods=['POST'])
@@ -44,6 +49,60 @@ def signup():
 
     new_user = user.user_obj(fname=fname, lname=lname, password=password, othername=other_name, email=email, phone_number=phone, username=username, isAdmin=isAdmin)
     return user.save(new_user)
+
+
+@v1.route('/login', methods=['POST'])
+def login():
+    """Log in route."""
+    data = request.json
+
+    required = ["email", "password"]
+    if data is None:
+        return jsonify({"status": 400, "error": "Please provide the required fields. {}".format([field for field in required])})
+    for key, value in data.items():
+        if value is None or value == "":
+            return jsonify({
+                "status": 400,
+                "error": "{} is missing.".format(key)
+            })
+        else:
+            email = data.get('email')
+            password = data.get('password')
+
+            if valid_email(email):
+                if email_exists(email, user_db):
+                    cur_user = user.get_user(email)
+                    if cur_user and check_password_hash(cur_user.get('password'), password):
+                        data = {
+                            "email": email,
+                            "sub": email,
+                            "exp": datetime.datetime.now() + datetime.timedelta(minutes=5)
+                        }
+                        token = jwt.encode(data, enc_key, algorithm='HS256')
+
+                        if token:
+                            return jsonify({
+                                "status": 200,
+                                "message": "Logged in successfully!",
+                                "token": token.decode('utf-8')
+                                })
+                        else:
+                            return jsonify({
+                                "status": 401,
+                                "message": "Could not verify token. Please sign in again!",
+                                "token": token.decode('utf-8')
+                                })
+
+                else:
+                    return jsonify({
+                        "status": 400,
+                        "message": "No user found with the given credentials"
+                        }), 400
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "Email invalid"
+                })
 
 
 @v1.route('/meetups/upcoming', methods=['GET'])
