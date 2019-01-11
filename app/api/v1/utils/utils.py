@@ -20,7 +20,7 @@ def requires_token(route):
                 }), 401
 
         try:
-            data = jwt.decode(token, key, algorithm='HS256')
+            data = jwt.decode(token, key, algorithms='HS256')
             user = u.get_user(data['email'])
             if user is False:
                 return jsonify({
