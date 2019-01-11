@@ -33,18 +33,25 @@ class UsersModel(BaseModel):
         }
         return user
 
+    def get_user(self, email):
+        current_user = [user for user in self.db if user['email'] == email]
+        if current_user:
+            return current_user[0]
+        else:
+            return False
+
     def save(self, user):
         """Save a new user."""
         email = user['email']
         username = user['username']
         if valid_email(user['email']):
-            if email_exists(email, user_db):
+            if email_exists(email, self.db):
                 return jsonify({
                     "status": 409,
                     "error": "Email Already Exists. Perhaps you want to login?"
                 })
             else:
-                if username_exists(username, user_db):
+                if username_exists(username, self.db):
                     return jsonify({"status": 409, "error": "Username Already Exists!"}), 409
                 else:
                     self.db.append(user)
