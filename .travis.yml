@@ -17,4 +17,4 @@ script:
 
 after-success:
   - coveralls
-  - codevov --token=3e34ee55-1c1f-4645-8ab7-290df0661705
+  - codecov --token=3e34ee55-1c1f-4645-8ab7-290df0661705
