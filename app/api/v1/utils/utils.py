@@ -16,17 +16,21 @@ def requires_token(route):
         if not token:
             return jsonify({
                 "status": 401,
-                "error": "missing token",
-                'headers': request.headers
+                "error": "missing token"
                 }), 401
 
         try:
             data = jwt.decode(token, key, algorithm='HS256')
             user = u.get_user(data['email'])
+            if user is False:
+                return jsonify({
+                    "status": 404,
+                    "error": "User with given credentials was not found on the system"
+                    })
         except Exception as e:
             return jsonify({
                 "status": 401,
-                "message": "The token is invalid! "+ str(e),
+                "error": "The token is invalid! "+ str(e),
             }), 401
 
         return route(user, *args, **kwargs)
