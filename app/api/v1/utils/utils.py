@@ -2,11 +2,13 @@ import jwt
 from flask import request, jsonify
 from instance.config import key
 from app.api.v1.models.users_model import UsersModel
+from functools import wraps
 
 u = UsersModel()
 
 
 def requires_token(route):
+    @wraps(route)
     def wrapper(*args, **kwargs):
         token = None
 

@@ -166,6 +166,7 @@ def create_meetup(user):
                     ]
         }), 201
 
+
 @v1.route('/meetups/upcoming', methods=['GET'])
 def get_meetups():
     """Get all meetups route."""
@@ -238,3 +239,26 @@ def downvote(question_id):
         "message": "Question downvoted successfully!",
         "question": downvoted_votes
     })
+
+
+@v1.route('/meetups/<int:meetup_id>/rsvps', methods=['POST'])
+@requires_token
+def rsvp_a_meetup(user, meetup_id):
+    meetup = meetup_id
+    user = user['id']
+    try:
+        data = request.get_json()
+        resp = data.get('response')
+    except Exception:
+        return jsonify({
+            "status": 400,
+            "error": "Please provide the following fields. {}".format('response')
+        }), 400
+
+    if not resp:
+        return jsonify({
+            "status": 400,
+            "message": "{} is missing.".format(resp)
+        }), 400
+    new_rsvp = m.rsvp(meetup=meetup, user=user, response=resp)
+    return m.create_rsvp(rsvp=new_rsvp)
