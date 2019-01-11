@@ -16,7 +16,7 @@ class TestMeetups(BaseTest):
                 "body": "What are the basic requirements that one needs when one training their dragon?",
                 "createdBy": "waithaka"
             }
-            post_response = c.post('/api/v1/meetups', json=question, headers=headers)
+            post_response = c.post('/api/v1/questions', json=question, headers=headers)
             result = json.loads(post_response.data.decode('utf-8'))
 
             self.assertEqual(result['status'], 201)
@@ -32,7 +32,7 @@ class TestMeetups(BaseTest):
                 "body": "What are the basic requirements that one needs when one training their dragon?",
                 "createdBy": "waithaka"
             }
-            post_response = c.post('/api/v1/meetups', json=question, headers=headers)
+            post_response = c.post('/api/v1/questions', json=question, headers=headers)
             result = json.loads(post_response.data.decode('utf-8'))
 
             self.assertEqual(result['error'], "title is missing.")
