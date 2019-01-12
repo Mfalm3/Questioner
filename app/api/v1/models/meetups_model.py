@@ -51,7 +51,7 @@ class MeetupsModel(BaseModel):
 
     def create_rsvp(self, rsvp):
         meetup = rsvp['meetup']
-        topic = self.get_meetup(meetup)['title']
+        topic = self.get_meetup(meetup)['topic']
         status = rsvp['response']
         return jsonify({
             "status": 201,
