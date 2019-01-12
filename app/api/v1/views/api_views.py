@@ -22,31 +22,42 @@ user_db = init_db(user_db)
 @v1.route('/signup', methods=['POST'])
 def signup():
     """Sign up route."""
-    data = request.json
+    required = ["firstname", "lastname", "password", "email", "phoneNumber", "username", "isAdmin"]
+    try:
+        data = request.get_json()
+        if data is None:
+            return jsonify({
+                "status": 400,
+                "error": "Please provide the required fields. {}".format([field for field in required])
+            })
+    except Exception:
+        return jsonify({
+            "status": 400,
+            "error": "Please provide the required fields. {}".format([field for field in required])
+        })
+    fname = data.get('firstname')
+    lname = data.get("lastname")
+    password = data.get("password")
+    other_name = data.get("othername") or ''
+    email = data.get("email")
+    phone = data.get("phoneNumber")
+    username = data.get("username")
+    isAdmin = data.get("isAdmin")
 
-    fname = data['firstname']
-    lname = data["lastname"]
-    password = data["password"]
-    other_name = data["othername"] or ''
-    email = data["email"]
-    phone = data["phoneNumber"]
-    username = data["username"]
-    isAdmin = data["isAdmin"]
-
-    if not all([data.get('firstname')]):
+    if not fname:
+        return jsonify({"status": 400, "error": "{} is missing.".format("firstname")}), 400
+    if not lname:
+        return jsonify({"status": 400, "error": "{} is missing.".format("lastname")}), 400
+    if not password:
+        return jsonify({"status": 400, "error": "{} is missing.".format("password")}), 400
+    if not email:
+        return jsonify({"status": 400, "error": "{} is missing.".format("email")}), 400
+    if not phone:
+        return jsonify({"status": 400, "error": "{} is missing.".format("phoneNumber")}), 400
+    if not username:
         return jsonify({"status": 400, "error": "{} is missing.".format("username")}), 400
-    if not all([data.get('lastname')]):
-        return jsonify({"status": 400, "error": "{} is missing.".format("lastname")})
-    if not all([data.get('password')]):
-        return jsonify({"status": 400, "error": "{} is missing.".format("password")})
-    if not all([data.get('email')]):
-        return jsonify({"status": 400, "error": "{} is missing.".format("email")})
-    if not all([data.get('phoneNumber')]):
-        return jsonify({"status": 400, "error": "{} is missing.".format("email")})
-    if not all([data.get('username')]):
-        return jsonify({"status": 400, "error": "{} is missing.".format("phoneNumber")})
-    if not all([data.get('isAdmin')]):
-        return jsonify({"status": 400, "error": "{} is missing.".format("isAdmin")})
+    if not isAdmin:
+        return jsonify({"status": 400, "error": "{} is missing.".format("isAdmin")}), 400
 
     new_user = user.user_obj(fname=fname, lname=lname, password=password, othername=other_name, email=email, phone_number=phone, username=username, isAdmin=isAdmin)
     return user.save(new_user)
@@ -90,14 +101,14 @@ def login():
                         else:
                             return jsonify({
                                 "status": 401,
-                                "message": "Could not verify token. Please sign in again!",
+                                "error": "Could not verify token. Please sign in again!",
                                 "token": token.decode('utf-8')
                                 })
 
                 else:
                     return jsonify({
                         "status": 400,
-                        "message": "No user found with the given credentials"
+                        "error": "No user found with the given credentials"
                         }), 400
             else:
                 return jsonify({
@@ -117,54 +128,54 @@ def create_meetup(user):
     required = ["topic", "location", "happeningOn", "tags"]
     try:
         data = request.get_json()
+
+        topic = data.get('topic')
+        location = data.get('location')
+        images = data.get('images')
+        happeningOn = data.get('happeningOn')
+        tags = data.get('tags')
+        tag = tags.split(',')
+
+        if not topic:
+            return jsonify({
+                "status": 400,
+                "message": "{} is missing.".format("topic")
+            }), 400
+        if not location:
+            return jsonify({
+                "status": 400,
+                "message": "{} is missing.".format("location")
+            }), 400
+        if not happeningOn:
+            return jsonify({
+                "status": 400,
+                "message": "{} is missing.".format("happeningOn")
+            }), 400
+        if not tags:
+            return jsonify({
+                "status": 400,
+                "message": "{} is missing.".format("tags")
+            }), 400
+        else:
+            new_meetup = m.meetup(location=location, images=images, topic=topic, happeningOn=happeningOn, tags=tag)
+            meetup = m.create(new_meetup)
+            return jsonify({
+                "status": 201,
+                "message": "Meetup created successfully!",
+                "data": [
+                        {
+                            "topic": topic,
+                            "location": location,
+                            "happeningOn": happeningOn,
+                            "tags": tag
+                            }
+                        ]
+            }), 201
     except Exception:
         return jsonify({
             "status": 400,
             "error": "Please provide the following fields. {}".format([item for item in required])
         }), 400
-
-    topic = data.get('topic')
-    location = data.get('location')
-    images = data.get('images')
-    happeningOn = data.get('happeningOn')
-    tags = data.get('tags')
-    tag = tags.split(',')
-
-    if not topic:
-        return jsonify({
-            "status": 400,
-            "message": "{} is missing.".format(topic)
-        }), 400
-    if not location:
-        return jsonify({
-            "status": 400,
-            "message": "{} is missing.".format(location)
-        }), 400
-    if not happeningOn:
-        return jsonify({
-            "status": 400,
-            "message": "{} is missing.".format(happeningOn)
-        }), 400
-    if not tags:
-        return jsonify({
-            "status": 400,
-            "message": "{} is missing.".format(tags)
-        }), 400
-    else:
-        new_meetup = m.meetup(location=location, images=images, topic=topic, happeningOn=happeningOn, tags=tag)
-        meetup = m.create(new_meetup)
-        return jsonify({
-            "status": 201,
-            "message": "Meetup created successfully!",
-            "data": [
-                    {
-                        "topic": topic,
-                        "location": location,
-                        "happeningOn": happeningOn,
-                        "tags": tag
-                        }
-                    ]
-        }), 201
 
 
 @v1.route('/meetups/upcoming', methods=['GET'])
@@ -180,24 +191,42 @@ def get_meetups():
 @v1.route('/questions', methods=['POST'])
 def post_question():
     """Post a question route."""
-    data = request.json
     required = ["title", "meetup", "body", "createdBy"]
-    if data is None:
-        return jsonify({"status": 400, "error": "Please provide the required fields. {}".format([field for field in required])})
-    for key, value in data.items():
-        if value is None or value == "":
-            return jsonify({
-                "status": 400,
-                "error": "{} is missing.".format(key)
-            })
-        else:
-            title = data.get("title")
-            meetup = data.get("meetup")
-            body = data.get("body")
-            createdBy = data.get("createdBy")
+    try:
+        data = request.get_json()
+    except Exception:
+        return jsonify({
+            "status": 400,
+            "error": "Please provide the following fields. {}".format([items for items in required])
+        })
+    title = data.get("title")
+    meetup = data.get("meetup")
+    body = data.get("body")
+    createdBy = data.get("createdBy")
 
-            query = q.question(title=title, body=body, meetup=meetup, author=createdBy, votes=0)
-            return q.save(query)
+    if not title:
+        return jsonify({
+            "status": 400,
+            "error": "{} is missing.".format('title')
+            })
+    if not meetup:
+        return jsonify({
+            "status": 400,
+            "error": "{} is missing.".format('meetup')
+            })
+    if not body:
+        return jsonify({
+            "status": 400,
+            "error": "{} is missing.".format('body')
+            })
+    if not createdBy:
+        return jsonify({
+            "status": 400,
+            "error": "{} is missing.".format('createdBy')
+            })
+    else:
+        new_question = q.question(title=title, body=body, meetup=meetup, author=createdBy, votes=0)
+        return q.save(new_question)
 
 
 @v1.route('/meetups/<int:meetup_id>', methods=['GET'])
@@ -246,19 +275,28 @@ def downvote(question_id):
 def rsvp_a_meetup(user, meetup_id):
     meetup = meetup_id
     user = user['id']
+    required = ["yes", "no", "maybe"]
     try:
         data = request.get_json()
         resp = data.get('response')
-    except Exception:
-        return jsonify({
-            "status": 400,
-            "error": "Please provide the following fields. {}".format('response')
-        }), 400
 
-    if not resp:
-        return jsonify({
-            "status": 400,
-            "message": "{} is missing.".format(resp)
-        }), 400
-    new_rsvp = m.rsvp(meetup=meetup, user=user, response=resp)
-    return m.create_rsvp(rsvp=new_rsvp)
+        for key, value in data.items():
+            if key != "response":
+                return jsonify({
+                    "status": 400,
+                    "error": "Please provide the following fields. {}".format('response')
+                }), 400
+            if value not in required:
+                return jsonify({
+                    "status": 400,
+                    "error": "Only the following responses are allowed. {}".format([item for item in required])
+                    }), 400
+            new_rsvp = m.rsvp(meetup=meetup, user=user, response=resp)
+            return m.create_rsvp(rsvp=new_rsvp)
+    
+    except Exception as e:
+        raise e
+    #     return jsonify({
+    #         "status": 400,
+    #         "error": "Please provide the following fields. {}".format('response')
+    #     }), 400

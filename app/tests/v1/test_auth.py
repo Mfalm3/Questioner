@@ -66,13 +66,21 @@ class TestAuths(unittest.TestCase):
                 "phoneNumber": "254722222222",
                 "username": "waithaka",
                 "registered": date,
-                "isAdmin": False,
+                "isAdmin": "False",
             }
             signup_response = c.post('/api/v1/signup', json=signup_data0, headers=headers)
             result = json.loads(signup_response.data.decode('utf-8'))
 
             self.assertEqual(result["status"], 400)
             self.assertEqual(result["error"], "lastname is missing.")
+
+    def test_signup_no_json(self):
+        with self.client as c:
+            headers = {"Content-Type": self.mime_type}
+            response = c.post('/api/v1/signup', headers=headers)
+            result = json.loads(response.data.decode('utf-8'))
+
+            self.assertEqual(result['error'], "Please provide the required fields. ['firstname', 'lastname', 'password', 'email', 'phoneNumber', 'username', 'isAdmin']")
 
     def test_signin(self):
         with self.client as c:
@@ -92,3 +100,12 @@ class TestAuths(unittest.TestCase):
             result2 = json.loads(response2.data.decode('utf-8'))
 
             self.assertIsNotNone(result2['token'])
+            self.assertEqual(result2['message'], "Logged in successfully!")
+
+    def test_signin_user_not_exist(self):
+        with self.client as c:
+            headers = {"Content-Type": self.mime_type}
+            response = c.post('/api/v1/login', headers=headers, json=self.user2)
+            result = json.loads(response.data.decode('utf-8'))
+
+            self.assertEqual(result['error'], "No user found with the given credentials")
