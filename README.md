@@ -46,10 +46,14 @@ if not installed, view installation details from [pip website](https://pip.pypa.
 #### 7. Create and Activate virtual environment
 `$ virtualenv venv`
 `$ source venv/bin/activate`
-#### 8. Run the app
-`$ python3 run.py`
 
-## 9. Use postman to test the following endpoints
+#### 8. Install the required dependancies
+`$ pip intall -r requirements.txt`
+
+#### 9. Run the app
+`$ python run.py`
+
+#### 10. Use postman to test the following endpoints
 
 | Endpoints                                  |               Functions                |
 | ------------------------------------------ | :------------------------------------: |
@@ -66,6 +70,9 @@ if not installed, view installation details from [pip website](https://pip.pypa.
 
 #### Testing
 `$ pytest`
+
+### Heroku
+This API is hosted on Heroku at https://qmeetups.herokuapp.com. There is no default route that has been configured but you can test the API's endpoints by providing their paths after the host name. For instance, to test user account registration navigate to https://qmeetups.herokuapp.com/signup.
 
 #### Acknowledgements
 1. Andela workshops
