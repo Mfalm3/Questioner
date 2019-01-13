@@ -72,7 +72,7 @@ if not installed, view installation details from [pip website](https://pip.pypa.
 `$ pytest`
 
 ### Heroku
-This API is hosted on Heroku at https://qmeetups.herokuapp.com. There is no default route that has been configured but you can test the API's endpoints by providing their paths after the host name. For instance, to test user account registration navigate to https://qmeetups.herokuapp.com/signup.
+This API is hosted on Heroku at https://qmeetups.herokuapp.com. There is no default route that has been configured but you can test the API's endpoints by providing their paths after the host name. For instance, to test user account registration navigate to https://qmeetups.herokuapp.com/api/v1/signup.
 
 #### Acknowledgements
 1. Andela workshops
