@@ -28,7 +28,7 @@ Crowd-source questions for a meetup. Questioner helps the meetup organizer prior
 `$ git clone https://github.com/Mfalm3/Questioner.git`
 
 #### 2. Checkout to the develop branch
-`$ git checkout deveelop`
+`$ git checkout develop`
 
 #### 3. Ensure you have python 3 on your device
 `$ python3 --version`
@@ -58,13 +58,14 @@ if not installed, view installation details from [pip website](https://pip.pypa.
 | POST/api/v1/meetups                        |             create meetups             |
 | GET/api/v1/meetups/&lt;id&gt;              |         get a specific meetups         |
 | GET/api/v1/meetups/upcoming                |        get all upcoming meetups        |
-| POST/api/v1/questions                      |       add question for a meetups       |
-| GET/api/v1/questions                       | view all questions for a given meetups |
+| POST/api/v1/questions                      |       add question to a meetup         |
 | POST/api/v1/meetups/&lt;id&gt;/rsvp        |     respond to meetups invitation      |
 | PATCH/api/v1/questions/&lt;id&gt;/upvote   |           upvote a question            |
 | PATCH/api/v1/questions/&lt;id&gt;/downvote |          downvote a question           |
 | POST/api/v1/questions/&lt;id&gt;/          |        view a specific question        |
 
+#### Testing
+`$ pytest`
 
 #### Acknowledgements
 1. Andela workshops
