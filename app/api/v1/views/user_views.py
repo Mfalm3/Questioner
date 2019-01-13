@@ -23,14 +23,12 @@ def signup():
         if data is None:
             return jsonify({
                 "status": 400,
-                "error": "Please provide the required fields. \
-                {}".format([field for field in required])
+                "error": "Please provide the required fields. {}".format([field for field in required])
             })
     except Exception:
         return jsonify({
             "status": 400,
-            "error": "Please provide the required fields. \
-            {}".format([field for field in required])
+            "error": "Please provide the required fields. {}".format([field for field in required])
         })
     fname = data.get('firstname')
     lname = data.get("lastname")
@@ -69,8 +67,7 @@ def login():
     if data is None:
         return jsonify({
             "status": 400,
-            "error": "Please provide the required fields. \
-            {}".format([field for field in required])})
+            "error": "Please provide the required fields. {}".format([field for field in required])})
 
     for key, value in data.items():
         if value is None or value == "":
