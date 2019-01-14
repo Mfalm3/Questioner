@@ -1,8 +1,9 @@
-"""File containing the validations for the app"""
+# File containing the validations for the app
 import re
 
 
 def valid_email(email):
+    """Check if an email matches a regex pattern."""
     if(re.match("^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$", email)):
         return True
     return False
