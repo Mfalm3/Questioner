@@ -9,12 +9,12 @@ from app.api.v1.models.users_model import UsersModel
 from instance.config import key as enc_key
 
 
-v1_u = Blueprint('v1_u', __name__, url_prefix='/api/v1')
+v1_user_blueprint = Blueprint('v1_u', __name__, url_prefix='/api/v1')
 user = UsersModel()
 user_db = init_db(user_db)
 
 
-@v1_u.route('/signup', methods=['POST'])
+@v1_user_blueprint.route('/signup', methods=['POST'])
 def signup():
     """Sign up route."""
     required = ["firstname", "lastname", "password", "email", "phoneNumber", "username", "isAdmin"]
@@ -58,7 +58,7 @@ def signup():
     return user.save(new_user)
 
 
-@v1_u.route('/login', methods=['POST'])
+@v1_user_blueprint.route('/login', methods=['POST'])
 def login():
     """Log in route."""
     data = request.json
