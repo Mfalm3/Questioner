@@ -3,11 +3,11 @@ from flask import Blueprint, request, jsonify
 from ..models.questions_model import QuestionModel
 
 
-v1_q = Blueprint('v1_q', __name__, url_prefix='/api/v1')
+v1_questions_blueprint = Blueprint('v1_q', __name__, url_prefix='/api/v1')
 q = QuestionModel()
 
 
-@v1_q.route('/questions', methods=['POST'])
+@v1_questions_blueprint.route('/questions', methods=['POST'])
 def post_question():
     """Post a question route."""
     required = ["title", "meetup", "body", "createdBy"]
@@ -50,7 +50,7 @@ def post_question():
         return q.save(new_question)
 
 
-@v1_q.route('/questions/<int:question_id>/upvote', methods=['PATCH'])
+@v1_questions_blueprint.route('/questions/<int:question_id>/upvote', methods=['PATCH'])
 def upvote(question_id):
     """Upvote a specific question."""
     query = q.get_question(question_id)
@@ -62,7 +62,7 @@ def upvote(question_id):
     })
 
 
-@v1_q.route('/questions/<int:question_id>/downvote', methods=['PATCH'])
+@v1_questions_blueprint.route('/questions/<int:question_id>/downvote', methods=['PATCH'])
 def downvote(question_id):
     """Downvote a specific question."""
     query = q.get_question(question_id)
