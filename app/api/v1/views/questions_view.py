@@ -1,4 +1,4 @@
-"""Questions Views."""
+# Questions Views.
 from flask import Blueprint, request, jsonify
 from ..models.questions_model import QuestionModel
 
