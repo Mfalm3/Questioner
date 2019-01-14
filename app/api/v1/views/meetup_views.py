@@ -1,11 +1,11 @@
-"""Meetups Views."""
+# Meetups Views.
 from flask import Blueprint, request, jsonify
 from ..models.meetups_model import MeetupsModel
 from ..utils.utils import requires_token
 
 
 v1_meetup_blueprint = Blueprint('v1_m', __name__, url_prefix='/api/v1')
-m = MeetupsModel()
+the_meetup = MeetupsModel()
 
 
 @v1_meetup_blueprint.route('/meetups', methods=['POST'])
@@ -49,10 +49,10 @@ def create_meetup(user):
                 "message": "{} is missing.".format("tags")
             }), 400
         else:
-            new_meetup = m.meetup(location=location,
+            new_meetup = the_meetup.meetup(location=location,
                                   images=images, topic=topic,
                                   happeningOn=happeningOn, tags=tag)
-            m.create(new_meetup)
+            the_meetup.create(new_meetup)
             return jsonify({
                 "status": 201,
                 "message": "Meetup created successfully!",
@@ -76,7 +76,7 @@ def create_meetup(user):
 @v1_meetup_blueprint.route('/meetups/upcoming', methods=['GET'])
 def get_meetups():
     """Get all meetups route."""
-    meetups = m.get_all()
+    meetups = the_meetup.get_all()
     return jsonify({
         "status": 200,
         "data": meetups
@@ -93,7 +93,7 @@ def get_one(meetup_id):
             "error": "Wrong parameters supplied for the request"
         }), 400
     else:
-        resp = m.get_meetup(meetup)
+        resp = the_meetup.get_meetup(meetup)
         return jsonify({
             "status": 200,
             "data": resp
