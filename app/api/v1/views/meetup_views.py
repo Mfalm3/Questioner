@@ -4,11 +4,11 @@ from ..models.meetups_model import MeetupsModel
 from ..utils.utils import requires_token
 
 
-v1_m = Blueprint('v1_m', __name__, url_prefix='/api/v1')
+v1_meetup_blueprint = Blueprint('v1_m', __name__, url_prefix='/api/v1')
 m = MeetupsModel()
 
 
-@v1_m.route('/meetups', methods=['POST'])
+@v1_meetup_blueprint.route('/meetups', methods=['POST'])
 @requires_token
 def create_meetup(user):
     """Create a meetup route."""
@@ -73,7 +73,7 @@ def create_meetup(user):
         }), 400
 
 
-@v1_m.route('/meetups/upcoming', methods=['GET'])
+@v1_meetup_blueprint.route('/meetups/upcoming', methods=['GET'])
 def get_meetups():
     """Get all meetups route."""
     meetups = m.get_all()
@@ -83,7 +83,7 @@ def get_meetups():
     })
 
 
-@v1_m.route('/meetups/<int:meetup_id>', methods=['GET'])
+@v1_meetup_blueprint.route('/meetups/<int:meetup_id>', methods=['GET'])
 def get_one(meetup_id):
     """Get a specific meetup."""
     meetup = meetup_id
@@ -100,7 +100,7 @@ def get_one(meetup_id):
         }), 200
 
 
-@v1_m.route('/meetups/<int:meetup_id>/rsvps', methods=['POST'])
+@v1_meetup_blueprint.route('/meetups/<int:meetup_id>/rsvps', methods=['POST'])
 @requires_token
 def rsvp_a_meetup(user, meetup_id):
     """Rsvp to a meetup route."""
