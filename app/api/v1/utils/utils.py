@@ -1,3 +1,4 @@
+# Decorator function for assigning auth tokens
 import jwt
 from flask import request, jsonify
 from instance.config import key
@@ -8,6 +9,7 @@ u = UsersModel()
 
 
 def requires_token(route):
+    """Require token decorator for route requiring a token."""
     @wraps(route)
     def wrapper(*args, **kwargs):
         token = None
@@ -32,7 +34,7 @@ def requires_token(route):
         except Exception as e:
             return jsonify({
                 "status": 401,
-                "error": "The token is invalid! "+ str(e),
+                "error": "The token is invalid! " + str(e),
             }), 401
 
         return route(user, *args, **kwargs)
