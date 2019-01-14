@@ -1,4 +1,4 @@
-"""User views."""
+# User views.
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
 import datetime
