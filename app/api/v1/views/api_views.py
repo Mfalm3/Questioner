@@ -1,9 +1,9 @@
 # App views.
-from .user_views import v1_u
-from .meetup_views import v1_m
-from .questions_view import v1_q
+from .user_views import v1_user_blueprint
+from .meetup_views import v1_meetup_blueprint
+from .questions_view import v1_questions_blueprint
 
 
-v1_m = v1_m
-v1_q = v1_q
-v1_u = v1_u
+v1_meetups = v1_meetup_blueprint
+v1_questions = v1_questions_blueprint
+v1_users = v1_user_blueprint
