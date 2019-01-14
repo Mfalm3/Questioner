@@ -124,8 +124,8 @@ def rsvp_a_meetup(user, meetup_id):
                     "error": "Only the following responses are allowed. \
                      {}".format([item for item in required])
                     }), 400
-            new_rsvp = m.rsvp(meetup=meetup, user=user, response=resp)
-            return m.create_rsvp(rsvp=new_rsvp)
+            new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
+            return the_meetup.create_rsvp(rsvp=new_rsvp)
 
     except Exception as e:
         raise e
