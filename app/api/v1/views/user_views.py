@@ -34,13 +34,13 @@ def signup():
                 "status": 400,
                 "error": "Please provide the required " \
                 "fields. {}".format([field for field in required])
-            })
+            }), 400
     except Exception:
         return jsonify({
             "status": 400,
             "error": "Please provide the required " \
             "fields. {}".format([field for field in required])
-        })
+        }), 400
     fname = data.get('firstname')
     lname = data.get("lastname")
     password = data.get("password")
@@ -109,12 +109,12 @@ def login():
         return jsonify({
             "status": 400,
             "error": "email is missing."
-        })
+        }), 400
     if is_empty(password):
         return jsonify({
             "status": 400,
             "error": "password is missing."
-        })
+        }), 400
 
     if valid_email(email):
         if email_exists(email, user_db):
@@ -135,14 +135,14 @@ def login():
                         "status": 200,
                         "message": "Logged in successfully!",
                         "token": token.decode('utf-8')
-                        })
+                        }), 200
                 else:
                     return jsonify({
                         "status": 401,
                         "error": "Could not verify token. \
                         Please sign in again!",
                         "token": token.decode('utf-8')
-                        })
+                        }), 401
 
         else:
             return jsonify({
