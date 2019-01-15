@@ -79,6 +79,32 @@ class TestAuths(unittest.TestCase):
             self.assertEqual(result["status"], 400)
             self.assertEqual(result["error"], "lastname is missing.")
 
+    def test_signup_dots_email_field(self):
+        """Test for sign in with a missing field"""
+        with self.client as c:
+            headers = {"Content-Type": self.mime_type}
+            date = str(datetime.datetime.now().strftime("%I:%M%p %d %b %Y"))
+            signup_data1 = {
+                "id": 1,
+                "firstname": "Joe",
+                "lastname": "Wa",
+                "password": "password",
+                "othername": "",
+                "email": "...@gmail.com",
+                "phoneNumber": "254722222222",
+                "username": "waithaka",
+                "registered": date,
+                "isAdmin": "False",
+            }
+            signup_response = c.post('/api/v1/signup',
+                                     json=signup_data1,
+                                     headers=headers)
+            result = json.loads(signup_response.data.decode('utf-8'))
+
+            self.assertEqual(result["status"], 400)
+            self.assertEqual(result["error"], "Ensure your email is in" \
+                             " the right format! eg. test@example.com")
+
     def test_signup_no_json(self):
         """Test for user sign in with no data"""
         with self.client as c:
