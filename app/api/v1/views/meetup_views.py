@@ -27,7 +27,12 @@ def create_meetup(user):
         images = data.get('images')
         happeningOn = data.get('happeningOn')
         tags = data.get('tags')
-        tag = tags.split(',')
+
+        if isinstance(tags, list):
+            tag = ','.join(item for item in tags)
+            tag = tag.split(',')
+        else:
+            tag = tags.split(',')
 
         if not topic or is_empty(topic):
             return jsonify({
@@ -78,10 +83,6 @@ def create_meetup(user):
         }), 201
     except Exception as e:
         raise e
-    #     return jsonify({
-    #         "status": 400,
-    #         "error": str(e)
-    #     }), 400
 
 
 @v1_meetup_blueprint.route('/meetups/upcoming', methods=['GET'])
