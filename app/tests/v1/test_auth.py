@@ -86,8 +86,9 @@ class TestAuths(unittest.TestCase):
             response = c.post('/api/v1/signup', headers=headers)
             result = json.loads(response.data.decode('utf-8'))
 
-            self.assertEqual(result['error'],
-                             "Please provide the required fields. ['firstname', 'lastname', 'password', 'email', 'phoneNumber', 'username', 'isAdmin']")
+            self.assertEqual(result['error'], "Please provide the required" \
+                             " fields. ['firstname', 'lastname', 'password',"\
+                             " 'email', 'phoneNumber', 'username', 'isAdmin']")
 
     def test_signin(self):
         """Test for user sign in."""
@@ -98,7 +99,7 @@ class TestAuths(unittest.TestCase):
                               json=self.user1)
             result = json.loads(response.data.decode('utf-8'))
 
-            email = result['user'][0]['email']
+            email = result['user']['email']
 
             self.assertEqual(email, "test@gmail.com")
             data = {
