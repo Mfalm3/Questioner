@@ -10,7 +10,8 @@ class TestMeetup(BaseTest):
         """Test for getting all meetups"""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
-            meetups_response = c.get('/api/v1/meetups/upcoming', headers=headers)
+            meetups_response = c.get('/api/v1/meetups/upcoming',
+                                     headers=headers)
             response = json.loads(meetups_response.data.decode('utf-8'))
 
             self.assertEqual(meetups_response.status_code, 200)
