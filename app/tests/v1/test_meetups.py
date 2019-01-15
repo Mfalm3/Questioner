@@ -47,6 +47,35 @@ class TestMeetup(BaseTest):
             self.assertEqual(meetup_res['message'],
                              "Meetup created successfully!")
 
+    def test_create_meetup_with_tags_list(self):
+        """Test for creating a new meetup"""
+        with self.client as c:
+
+            headers = {"Content-Type": self.mime_type}
+            c.post('/api/v1/signup',
+                   json=self.user1,
+                   headers=headers)
+            login = c.post('/api/v1/login',
+                           json=self.login_payload,
+                           headers=headers)
+            login_resp = json.loads(login.data.decode('utf-8'))
+
+            self.assertIn("token", login_resp)
+
+            token = login_resp['token']
+            header_extra = {
+                "Content-type": self.mime_type,
+                "X-ACCESS-TOKEN": token
+                }
+
+            post_meetup = c.post('/api/v1/meetups',
+                                 json=self.meetup_payload2,
+                                 headers=header_extra)
+            meetup_res = json.loads(post_meetup.data.decode('utf-8'))
+
+            self.assertEqual(meetup_res['message'],
+                             "Meetup created successfully!")
+
     def test_create_meetup_topic_with_less_than_required_characters(self):
         """Test for creating a new meetup"""
         with self.client as c:
