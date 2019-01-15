@@ -33,6 +33,7 @@ def internal_server_error(error):
 def create_app(config='development'):
     """Initialize the app function."""
     app = Flask(__name__)
+    app.url_map.strict_slashes = False
     app.register_blueprint(v1_users, url_prefix='/api/v1')
     app.register_blueprint(v1_meetups, url_prefix='/api/v1')
     app.register_blueprint(v1_questions, url_prefix='/api/v1')
