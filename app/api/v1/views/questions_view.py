@@ -4,7 +4,7 @@ from ..models.questions_model import QuestionModel
 
 
 v1_questions_blueprint = Blueprint('v1_q', __name__, url_prefix='/api/v1')
-q = QuestionModel()
+QUESTION_MODEL = QuestionModel()
 
 
 @v1_questions_blueprint.route('/questions', methods=['POST'])
@@ -45,16 +45,16 @@ def post_question():
             "error": "{} is missing.".format('createdBy')
             })
     else:
-        new_question = q.question(title=title, body=body,
+        new_question = QUESTION_MODEL.question(title=title, body=body,
                                   meetup=meetup, author=createdBy, votes=0)
-        return q.save(new_question)
+        return QUESTION_MODEL.save(new_question)
 
 
 @v1_questions_blueprint.route('/questions/<int:question_id>/upvote', methods=['PATCH'])
 def upvote(question_id):
     """Upvote a specific question."""
-    query = q.get_question(question_id)
-    updated_votes = q.upvote(query)
+    query = QUESTION_MODEL.get_question(question_id)
+    updated_votes = QUESTION_MODEL.upvote(query)
     return jsonify({
         "status": 200,
         "message": "Question upvoted successfully!",
@@ -65,8 +65,8 @@ def upvote(question_id):
 @v1_questions_blueprint.route('/questions/<int:question_id>/downvote', methods=['PATCH'])
 def downvote(question_id):
     """Downvote a specific question."""
-    query = q.get_question(question_id)
-    downvoted_votes = q.downvote(query)
+    query = QUESTION_MODEL.get_question(question_id)
+    downvoted_votes = QUESTION_MODEL.downvote(query)
     return jsonify({
         "status": 200,
         "message": "Question downvoted successfully!",
