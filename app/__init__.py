@@ -11,7 +11,7 @@ def method_not_allowed(error):
     return jsonify({
         'error': str(error),
         'status': 405
-        })
+        }), 500
 
 
 def resource_not_found(error):
