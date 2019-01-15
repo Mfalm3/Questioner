@@ -45,12 +45,16 @@ def post_question():
             "error": "{} is missing.".format('createdBy')
             })
     else:
-        new_question = QUESTION_MODEL.question(title=title, body=body,
-                                  meetup=meetup, author=createdBy, votes=0)
+        new_question = QUESTION_MODEL.question(title=title,
+                                               body=body,
+                                               meetup=meetup,
+                                               author=createdBy,
+                                               votes=0)
         return QUESTION_MODEL.save(new_question)
 
 
-@v1_questions_blueprint.route('/questions/<int:question_id>/upvote', methods=['PATCH'])
+@v1_questions_blueprint.route('/questions/<int:question_id>/upvote',
+                              methods=['PATCH'])
 def upvote(question_id):
     """Upvote a specific question."""
     query = QUESTION_MODEL.get_question(question_id)
@@ -62,7 +66,8 @@ def upvote(question_id):
     })
 
 
-@v1_questions_blueprint.route('/questions/<int:question_id>/downvote', methods=['PATCH'])
+@v1_questions_blueprint.route('/questions/<int:question_id>/downvote',
+                              methods=['PATCH'])
 def downvote(question_id):
     """Downvote a specific question."""
     query = QUESTION_MODEL.get_question(question_id)
