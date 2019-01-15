@@ -66,7 +66,7 @@ if not installed, view installation details from [pip website](https://pip.pypa.
 | POST/api/v1/meetups/&lt;id&gt;/rsvp        |     respond to meetups invitation      |
 | PATCH/api/v1/questions/&lt;id&gt;/upvote   |           upvote a question            |
 | PATCH/api/v1/questions/&lt;id&gt;/downvote |          downvote a question           |
-| POST/api/v1/questions/&lt;id&gt;/          |        view a specific question        |
+| GET/api/v1/questions/&lt;id&gt;/           |        view a specific question        |
 
 #### Testing
 `$ pytest`
