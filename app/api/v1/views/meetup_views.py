@@ -99,17 +99,24 @@ def get_meetups():
 def get_one(meetup_id):
     """Get a specific meetup."""
     meetup = meetup_id
-    if not int(meetup):
-        return jsonify({
-            "status": 400,
-            "error": "Wrong parameters supplied for the request"
-        }), 400
-    else:
+    try:
+        if not int(meetup):
+            return jsonify({
+                "status": 400,
+                "error": "Wrong parameters supplied for the request"
+            }), 400
+
         resp = the_meetup.get_meetup(meetup)
         return jsonify({
             "status": 200,
             "data": resp
-        }), 200
+            }), 200
+
+    except Exception:
+        return jsonify({
+            "status": 404,
+            "error": "The meetup of the given id is not found"
+                }), 404
 
 
 @v1_meetup_blueprint.route('/meetups/<int:meetup_id>/rsvps', methods=['POST'])
