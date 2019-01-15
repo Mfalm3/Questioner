@@ -60,19 +60,19 @@ class UsersModel(BaseModel):
             return jsonify({
                 "status": 400,
                 "error": "Fill in a name. No name should not be empty!"
-            })
+            }), 400
         if not no_numbers(fname) or not no_numbers(lname):
             return jsonify({
                 "status": 400,
                 "error": "Names should only contain alphabet characters!"
-            })
+            }), 400
 
         if valid_email(user['email']):
             if email_exists(email, self.db):
                 return jsonify({
                     "status": 409,
                     "error": "Email Already Exists. Perhaps you want to login?"
-                })
+                }), 409
             else:
                 if username_exists(username, self.db):
                     return jsonify({
