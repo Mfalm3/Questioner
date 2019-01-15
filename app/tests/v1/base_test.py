@@ -45,6 +45,12 @@ class BaseTest(unittest.TestCase):
             "happeningOn": "2:00pm 6th Feb 2019",
             "tags": "django,flask"
                 }
+        self.meetup_payload2 = {
+            "topic": "Bootcamp 36 retreat",
+            "location": "Andela, Nairobi",
+            "happeningOn": "2:00pm 6th Feb 2019",
+            "tags": ["django,flask"]
+                }
 
     def tearDown(self):
         self.client = None
