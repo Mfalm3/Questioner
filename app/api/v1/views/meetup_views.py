@@ -2,6 +2,7 @@
 from flask import Blueprint, request, jsonify
 from ..models.meetups_model import MeetupsModel
 from ..utils.utils import requires_token
+from app.api.v1.utils.validator import is_empty, required_length
 
 
 v1_meetup_blueprint = Blueprint('v1_m', __name__, url_prefix='/api/v1')
@@ -28,15 +29,27 @@ def create_meetup(user):
         tags = data.get('tags')
         tag = tags.split(',')
 
-        if not topic:
+        if not topic or is_empty(topic):
             return jsonify({
                 "status": 400,
                 "message": "{} is missing.".format("topic")
+            }), 400
+        topic_length = required_length(topic, "topic", 10)
+        if topic_length is not True:
+            return jsonify({
+                "status": 400,
+                "error": topic_length
             }), 400
         if not location:
             return jsonify({
                 "status": 400,
                 "message": "{} is missing.".format("location")
+            }), 400
+        location_length = required_length(location, "location", 10)
+        if location_length is not True:
+            return jsonify({
+                "status": 400,
+                "error": location_length
             }), 400
         if not happeningOn:
             return jsonify({
@@ -48,29 +61,27 @@ def create_meetup(user):
                 "status": 400,
                 "message": "{} is missing.".format("tags")
             }), 400
-        else:
-            new_meetup = the_meetup.meetup(location=location,
-                                  images=images, topic=topic,
-                                  happeningOn=happeningOn, tags=tag)
-            the_meetup.create(new_meetup)
-            return jsonify({
-                "status": 201,
-                "message": "Meetup created successfully!",
-                "data": [
-                        {
-                            "topic": topic,
-                            "location": location,
-                            "happeningOn": happeningOn,
-                            "tags": tag
-                            }
-                        ]
-            }), 201
-    except Exception:
+
+        new_meetup = the_meetup.meetup(location=location,
+                                       images=images, topic=topic,
+                                       happeningOn=happeningOn, tags=tag)
+        the_meetup.create(new_meetup)
         return jsonify({
-            "status": 400,
-            "error": "Please provide the following fields. \
-             {}".format([item for item in required])
-        }), 400
+            "status": 201,
+            "message": "Meetup created successfully!",
+            "data": [{
+                "topic": topic,
+                "location": location,
+                "happeningOn": happeningOn,
+                "tags": tag
+                        }]
+        }), 201
+    except Exception as e:
+        raise e
+    #     return jsonify({
+    #         "status": 400,
+    #         "error": str(e)
+    #     }), 400
 
 
 @v1_meetup_blueprint.route('/meetups/upcoming', methods=['GET'])
@@ -115,14 +126,14 @@ def rsvp_a_meetup(user, meetup_id):
             if key != "response":
                 return jsonify({
                     "status": 400,
-                    "error": "Please provide the following fields. \
-                     {}".format('response')
+                    "error": "Please provide the following" \
+                    "fields. {}".format('response')
                 }), 400
             if value not in required:
                 return jsonify({
                     "status": 400,
-                    "error": "Only the following responses are allowed. \
-                     {}".format([item for item in required])
+                    "error": "Only the following responses are allowed." \
+                     "{}".format([item for item in required])
                     }), 400
             new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
             return the_meetup.create_rsvp(rsvp=new_rsvp)
