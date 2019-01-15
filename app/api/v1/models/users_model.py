@@ -3,7 +3,8 @@ import datetime
 from flask import jsonify
 from werkzeug.security import generate_password_hash
 from app.db import init_db, user_db
-from app.api.v1.utils.validator import email_exists, username_exists, valid_email
+from app.api.v1.utils.validator import (email_exists, username_exists,
+valid_email)
 from .base_model import BaseModel
 
 
@@ -34,6 +35,7 @@ class UsersModel(BaseModel):
         return user
 
     def get_user(self, email):
+        """Get a user method"""
         current_user = [user for user in self.db if user['email'] == email]
         if current_user:
             return current_user[0]
