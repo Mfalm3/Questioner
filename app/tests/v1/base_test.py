@@ -28,7 +28,19 @@ class BaseTest(unittest.TestCase):
             "password": self.user1['password']
         }
         self.meetup_payload = {
+            "topic": "Bootcamp 36 retreat",
+            "location": "Andela, Nairobi",
+            "happeningOn": "2:00pm 6th Feb 2019",
+            "tags": "django,flask"
+                }
+        self.meetup_payload0 = {
             "topic": "Bootcamp",
+            "location": "Andela",
+            "happeningOn": "2:00pm 6th Feb 2019",
+            "tags": "django,flask"
+                }
+        self.meetup_payload1 = {
+            "topic": "Bootcamp 36 retreat",
             "location": "Andela",
             "happeningOn": "2:00pm 6th Feb 2019",
             "tags": "django,flask"
