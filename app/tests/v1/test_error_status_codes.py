@@ -14,8 +14,7 @@ class TestStatusCodes(BaseTest):
             signup_response = json.loads(signup_request.data.decode('utf-8'))
 
             self.assertEqual(signup_response['status'], 405)
-            self.assertEqual(signup_response['error'],
-                             "405 Method Not Allowed: The method is not allowed for the requested URL.")
+            self.assertEqual(signup_response['error'], "405 Method Not Allowed: The method is not allowed for the requested URL.")
 
     def test_error_404(self):
         """Test for error status code 404"""
@@ -24,8 +23,7 @@ class TestStatusCodes(BaseTest):
             signup_response = json.loads(signup_request.data.decode('utf-8'))
 
             self.assertEqual(signup_response['status'], 404)
-            self.assertEqual(signup_response['error'],
-                             "404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.")
+            self.assertEqual(signup_response['error'], "404 Not Found: The requested URL was not found on the server.  If you entered the URL manually please check your spelling and try again.")
 
     def test_error_403(self):
         """Test error 403 in creating a new meetup"""
