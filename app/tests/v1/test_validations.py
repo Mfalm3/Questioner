@@ -1,4 +1,4 @@
-# Test for validators
+""" Test for validators"""
 import unittest
 from app import create_app
 from app.api.v1.utils.validator import is_empty, no_numbers

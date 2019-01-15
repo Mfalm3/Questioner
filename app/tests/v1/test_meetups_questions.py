@@ -1,4 +1,4 @@
-# Test for Meetups.
+""" Test for Meetups."""
 import json
 from .base_test import BaseTest
 

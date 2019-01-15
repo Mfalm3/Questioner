@@ -1,4 +1,4 @@
-# Meetups Model file.
+""" Meetups Model file."""
 import datetime
 from flask import jsonify
 from app.db import meetup_db

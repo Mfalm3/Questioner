@@ -1,4 +1,4 @@
-# Users Model Class
+""" Users Model Class"""
 import datetime
 from flask import jsonify
 from werkzeug.security import generate_password_hash

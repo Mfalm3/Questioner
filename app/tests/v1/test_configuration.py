@@ -1,4 +1,4 @@
-# Test for Configurations
+""" Test for Configurations"""
 import unittest
 
 from app import create_app

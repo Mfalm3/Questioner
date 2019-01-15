@@ -1,4 +1,4 @@
-# Test for error handling
+"""Test for error handling"""
 import json
 import datetime
 from .base_test import BaseTest

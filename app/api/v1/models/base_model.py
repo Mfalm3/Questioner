@@ -1,4 +1,4 @@
-# Base model class
+""" Base model class"""
 
 from app.db import init_db
 

@@ -1,4 +1,4 @@
-# Question Model.
+""" Question Model."""
 import datetime
 from flask import jsonify
 from app.db import init_db, question_db

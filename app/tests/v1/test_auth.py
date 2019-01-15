@@ -1,4 +1,4 @@
-# Test user sign up and authentication class.
+""" Test user sign up and authentication class."""
 import unittest
 import datetime
 import json

@@ -1,4 +1,4 @@
-# Tests For Voting.
+""" Tests For Voting."""
 import json
 from .base_test import BaseTest
 
