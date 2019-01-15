@@ -87,9 +87,7 @@ class TestAuths(unittest.TestCase):
             result = json.loads(response.data.decode('utf-8'))
 
             self.assertEqual(result['error'],
-                             "Please provide the required fields.\
-                             ['firstname', 'lastname', 'password', 'email',\
-                             'phoneNumber', 'username', 'isAdmin']")
+                             "Please provide the required fields. ['firstname', 'lastname', 'password', 'email', 'phoneNumber', 'username', 'isAdmin']")
 
     def test_signin(self):
         """Test for user sign in."""
