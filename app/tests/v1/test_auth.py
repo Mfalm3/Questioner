@@ -1,9 +1,8 @@
-"""Test user sign up and authentication class."""
+# Test user sign up and authentication class.
 import unittest
-from app import create_app
 import datetime
 import json
-from werkzeug.security import check_password_hash
+from app import create_app
 
 
 class TestAuths(unittest.TestCase):
@@ -39,6 +38,7 @@ class TestAuths(unittest.TestCase):
         }
 
     def tearDown(self):
+        """Test tear down"""
         self.client = None
         self.user1 = None
 
@@ -46,13 +46,16 @@ class TestAuths(unittest.TestCase):
         """Test for user signup."""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
-            signup_response = c.post('/api/v1/signup', json=self.user2, headers=headers)
+            signup_response = c.post('/api/v1/signup',
+                                     json=self.user2,
+                                     headers=headers)
             result = json.loads(signup_response.data.decode('utf-8'))
             self.assertEqual(result["message"], "User Created Successfully!")
 
             self.assertEqual(result["status"], signup_response.status_code)
 
     def test_signup_missing_fields(self):
+        """Test for sign in with a missing field"""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
             date = str(datetime.datetime.now().strftime("%I:%M%p %d %b %Y"))
@@ -68,24 +71,33 @@ class TestAuths(unittest.TestCase):
                 "registered": date,
                 "isAdmin": "False",
             }
-            signup_response = c.post('/api/v1/signup', json=signup_data0, headers=headers)
+            signup_response = c.post('/api/v1/signup',
+                                     json=signup_data0,
+                                     headers=headers)
             result = json.loads(signup_response.data.decode('utf-8'))
 
             self.assertEqual(result["status"], 400)
             self.assertEqual(result["error"], "lastname is missing.")
 
     def test_signup_no_json(self):
+        """Test for user sign in with no data"""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
             response = c.post('/api/v1/signup', headers=headers)
             result = json.loads(response.data.decode('utf-8'))
 
-            self.assertEqual(result['error'], "Please provide the required fields. ['firstname', 'lastname', 'password', 'email', 'phoneNumber', 'username', 'isAdmin']")
+            self.assertEqual(result['error'],
+                             "Please provide the required fields.\
+                             ['firstname', 'lastname', 'password', 'email',\
+                             'phoneNumber', 'username', 'isAdmin']")
 
     def test_signin(self):
+        """Test for user sign in."""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
-            response = c.post('/api/v1/signup', headers=headers, json=self.user1)
+            response = c.post('/api/v1/signup',
+                              headers=headers,
+                              json=self.user1)
             result = json.loads(response.data.decode('utf-8'))
 
             email = result['user'][0]['email']
@@ -103,9 +115,13 @@ class TestAuths(unittest.TestCase):
             self.assertEqual(result2['message'], "Logged in successfully!")
 
     def test_signin_user_not_exist(self):
+        """Test for user does not exist."""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
-            response = c.post('/api/v1/login', headers=headers, json=self.user2)
+            response = c.post('/api/v1/login',
+                              headers=headers,
+                              json=self.user2)
             result = json.loads(response.data.decode('utf-8'))
 
-            self.assertEqual(result['error'], "No user found with the given credentials")
+            self.assertEqual(result['error'],
+                             "No user found with the given credentials")
