@@ -41,3 +41,14 @@ def no_numbers(string):
         if check_string.isalpha():
             return True
         return False
+
+
+def required_length(string, field='', length=8):
+    """Check for a given number of characters in a string"""
+    check_string = is_empty(string)
+    if not check_string:
+        if len(string) < length:
+            length_error = "The {} field requires a minimum number of " \
+             "{} characters".format(field, length)
+            return length_error
+        return True
