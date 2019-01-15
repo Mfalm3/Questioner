@@ -132,7 +132,7 @@ def rsvp_a_meetup(user, meetup_id):
             if value not in required:
                 return jsonify({
                     "status": 400,
-                    "error": "Only the following responses are allowed." \
+                    "error": "Only the following responses are allowed. " \
                      "{}".format([item for item in required])
                     }), 400
             new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
