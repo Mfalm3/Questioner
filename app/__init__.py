@@ -4,6 +4,32 @@ from app.api.v1.views.api_views import v1_users, v1_meetups, v1_questions
 from instance.config import app_config
 
 
+def method_not_allowed(error):
+    """
+    This function handles errors for methods not allowed on given endpoints
+    """
+    return jsonify({
+        'error': str(error),
+        'status': 405
+        })
+
+
+def resource_not_found(error):
+    """Error handler for url not found"""
+    return jsonify({
+        'error': str(error),
+        'status': 404
+        }), 404
+
+
+def internal_server_error(error):
+    """Error handler for url not found"""
+    return jsonify({
+        'error': str(error),
+        'status': 500
+        }), 500
+
+
 def create_app(config='development'):
     """Initialize the app function."""
     app = Flask(__name__)
@@ -13,28 +39,8 @@ def create_app(config='development'):
     app.config.from_object(app_config[config])
     app.config.from_pyfile('../instance/config.py')
 
-    @app.errorhandler(405)
-    def method_not_allowed(error):
-        """Error handler for method not allowed"""
-        return jsonify({
-            'error': 'Method not allowed',
-            'status': 405
-            }), 405
-
-    @app.errorhandler(404)
-    def url_not_found(error):
-        """Error handler for url not found"""
-        return jsonify({
-            'error': 'The requested URL was not found on the server',
-            'status': 404
-            }), 404
-
-    @app.errorhandler(500)
-    def internal_server_error(error):
-        """Error handler for url not found"""
-        return jsonify({
-            'error': 'Internal server error',
-            'status': 500
-            }), 500
+    app.register_error_handler(405, method_not_allowed)
+    app.register_error_handler(404, resource_not_found)
+    app.register_error_handler(500, internal_server_error)
 
     return app
