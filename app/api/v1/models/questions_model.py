@@ -1,8 +1,8 @@
-"""Question Model."""
+# Question Model.
 import datetime
 from flask import jsonify
-from .base_model import BaseModel
 from app.db import init_db, question_db
+from .base_model import BaseModel
 
 
 class QuestionModel(BaseModel):
@@ -10,16 +10,19 @@ class QuestionModel(BaseModel):
 
     def __init__(self):
         """Initialize the Meetup model."""
+
+        super(QuestionModel, self).__init__()
         self.db = init_db(question_db)
 
     def question(self, title, body, meetup, author, votes=0):
         """Question object."""
+        tstamp = datetime.datetime.now().strftime("%I:%M:%S%P %d %b %Y")
         query = {
             "id": len(self.db) + 1,
             "title": title,
             "body": body,
             "meetup": meetup,
-            "createdOn": datetime.datetime.now().strftime("%I:%M:%S%P %d %b %Y"),
+            "createdOn": tstamp,
             "createdBy": author,
             "votes": votes,
         }
