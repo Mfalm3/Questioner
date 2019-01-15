@@ -1,14 +1,14 @@
-"""Meetups Views."""
+# Meetups Views.
 from flask import Blueprint, request, jsonify
 from ..models.meetups_model import MeetupsModel
 from ..utils.utils import requires_token
 
 
-v1_m = Blueprint('v1_m', __name__, url_prefix='/api/v1')
-m = MeetupsModel()
+v1_meetup_blueprint = Blueprint('v1_m', __name__, url_prefix='/api/v1')
+the_meetup = MeetupsModel()
 
 
-@v1_m.route('/meetups', methods=['POST'])
+@v1_meetup_blueprint.route('/meetups', methods=['POST'])
 @requires_token
 def create_meetup(user):
     """Create a meetup route."""
@@ -49,10 +49,10 @@ def create_meetup(user):
                 "message": "{} is missing.".format("tags")
             }), 400
         else:
-            new_meetup = m.meetup(location=location,
+            new_meetup = the_meetup.meetup(location=location,
                                   images=images, topic=topic,
                                   happeningOn=happeningOn, tags=tag)
-            m.create(new_meetup)
+            the_meetup.create(new_meetup)
             return jsonify({
                 "status": 201,
                 "message": "Meetup created successfully!",
@@ -73,17 +73,17 @@ def create_meetup(user):
         }), 400
 
 
-@v1_m.route('/meetups/upcoming', methods=['GET'])
+@v1_meetup_blueprint.route('/meetups/upcoming', methods=['GET'])
 def get_meetups():
     """Get all meetups route."""
-    meetups = m.get_all()
+    meetups = the_meetup.get_all()
     return jsonify({
         "status": 200,
         "data": meetups
     })
 
 
-@v1_m.route('/meetups/<int:meetup_id>', methods=['GET'])
+@v1_meetup_blueprint.route('/meetups/<int:meetup_id>', methods=['GET'])
 def get_one(meetup_id):
     """Get a specific meetup."""
     meetup = meetup_id
@@ -93,14 +93,14 @@ def get_one(meetup_id):
             "error": "Wrong parameters supplied for the request"
         }), 400
     else:
-        resp = m.get_meetup(meetup)
+        resp = the_meetup.get_meetup(meetup)
         return jsonify({
             "status": 200,
             "data": resp
         }), 200
 
 
-@v1_m.route('/meetups/<int:meetup_id>/rsvps', methods=['POST'])
+@v1_meetup_blueprint.route('/meetups/<int:meetup_id>/rsvps', methods=['POST'])
 @requires_token
 def rsvp_a_meetup(user, meetup_id):
     """Rsvp to a meetup route."""
@@ -124,8 +124,8 @@ def rsvp_a_meetup(user, meetup_id):
                     "error": "Only the following responses are allowed. \
                      {}".format([item for item in required])
                     }), 400
-            new_rsvp = m.rsvp(meetup=meetup, user=user, response=resp)
-            return m.create_rsvp(rsvp=new_rsvp)
+            new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
+            return the_meetup.create_rsvp(rsvp=new_rsvp)
 
     except Exception as e:
         raise e

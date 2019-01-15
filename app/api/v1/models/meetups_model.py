@@ -1,8 +1,8 @@
-"""Meetups Model file."""
+""" Meetups Model file."""
 import datetime
 from flask import jsonify
-from .base_model import BaseModel, init_db
 from app.db import meetup_db
+from .base_model import BaseModel, init_db
 
 
 class MeetupsModel(BaseModel):
@@ -14,21 +14,21 @@ class MeetupsModel(BaseModel):
 
     def meetup(self, location, images, topic, happeningOn, tags):
         """Meetup object."""
+        tstamp = datetime.datetime.now().strftime("%I:%M:%S%P %d %b %Y")
         meetup = {
-                    "id": len(self.db) + 1,
-                    "createdOn": datetime.datetime.now().strftime("%I:%M:%S%P %d %b %Y"),
-                    "location": location,
-                    "images": images,
-                    "topic": topic,
-                    "happeningOn": happeningOn,
-                    "tags": tags,
-                    }
+            "id": len(self.db) + 1,
+            "createdOn": tstamp,
+            "location": location,
+            "images": images,
+            "topic": topic,
+            "happeningOn": happeningOn,
+            "tags": tags,
+        }
         return meetup
 
     def create(self, meetup):
         """Create a new meetup."""
         return self.db.append(meetup)
-
 
     def get_all(self):
         """Get all meetups."""
@@ -50,6 +50,7 @@ class MeetupsModel(BaseModel):
         return rsvp
 
     def create_rsvp(self, rsvp):
+        """Create an rsvp to a meetup"""
         meetup = rsvp['meetup']
         topic = self.get_meetup(meetup)['topic']
         status = rsvp['response']
