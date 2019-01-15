@@ -54,9 +54,9 @@ def post_question():
 
 
 @v1_questions_blueprint.route('/questions/<int:id>', methods=['GET'])
-def get_meetup_question(id):
+def get_meetup_question(question_id):
     """Get a pecific question"""
-    question = id
+    question = question_id
     try:
         if not int(question):
             return jsonify({
