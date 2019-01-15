@@ -4,7 +4,7 @@ from flask import jsonify
 from werkzeug.security import generate_password_hash
 from app.db import init_db, user_db
 from app.api.v1.utils.validator import (email_exists, username_exists,
-valid_email)
+valid_email, is_empty, no_numbers)
 from .base_model import BaseModel
 
 
@@ -46,6 +46,20 @@ class UsersModel(BaseModel):
         """Save a new user."""
         email = user['email']
         username = user['username']
+        fname = user['firstname']
+        lname = user['lastname']
+
+        if is_empty(username) or is_empty(fname) or is_empty(lname):
+            return jsonify({
+                "status": 400,
+                "error": "Fill in a name. No name should not be empty!"
+            })
+        if not no_numbers(fname) or not no_numbers(lname):
+            return jsonify({
+                "status": 400,
+                "error": "Names should only contain alphabet characters!"
+            })
+
         if valid_email(user['email']):
             if email_exists(email, self.db):
                 return jsonify({
