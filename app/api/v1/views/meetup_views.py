@@ -18,7 +18,6 @@ def create_meetup(user):
             "status": 403,
             "error": "Action requires Admin Priviledges"
         }), 403
-    required = ["topic", "location", "happeningOn", "tags"]
     try:
         data = request.get_json()
 
@@ -146,7 +145,7 @@ def rsvp_a_meetup(user, meetup_id):
             new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
             return the_meetup.create_rsvp(rsvp=new_rsvp)
 
-    except Exception as e:
+    except Exception:
         return jsonify({
             "status": 404,
             "error": "The meetup of the given id is not found"
