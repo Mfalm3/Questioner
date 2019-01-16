@@ -2,7 +2,7 @@
 from flask import Blueprint, request, jsonify
 from ..models.meetups_model import MeetupsModel
 from ..utils.utils import requires_token
-from app.api.v1.utils.validator import is_empty, required_length
+from app.api.v1.utils.validator import is_empty, required_length, meetup_exists
 
 
 v1_meetup_blueprint = Blueprint('v1_m', __name__, url_prefix='/api/v1')
@@ -53,6 +53,11 @@ def create_meetup(user):
                 "error": location_length
             }), 400
 
+        if meetup_exists(topic, meetup_db=the_meetup.db):
+            return jsonify({
+                "status": 409,
+                "error": "A meetup with that topic already exists!"
+            }), 409
         new_meetup = the_meetup.meetup(location=location,
                                        images=images, topic=topic,
                                        happeningOn=happening_on, tags=tags)

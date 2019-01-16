@@ -55,4 +55,6 @@ class BaseTest(unittest.TestCase):
     def tearDown(self):
         self.client = None
         self.login_payload = None
-        self.meetup_payload = None
+        self.meetup_payload0 = None
+        self.meetup_payload1 = None
+        self.meetup_payload2 = None
