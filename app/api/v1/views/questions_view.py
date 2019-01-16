@@ -53,7 +53,7 @@ def post_question():
         return QUESTION_MODEL.save(new_question)
 
 
-@v1_questions_blueprint.route('/questions/<int:id>', methods=['GET'])
+@v1_questions_blueprint.route('/questions/<int:question_id>', methods=['GET'])
 def get_meetup_question(question_id):
     """Get a pecific question"""
     question = question_id
