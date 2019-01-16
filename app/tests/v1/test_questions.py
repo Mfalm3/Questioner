@@ -36,7 +36,7 @@ class TestQuetions(unittest.TestCase):
             "meetup": "1",
             "body": "What are the basic requirements that one " \
             "needs when one training their dragon?",
-            "createdBy": "waithaka"
+            "createdBy": "123"
 }
 
     def tearDown(self):

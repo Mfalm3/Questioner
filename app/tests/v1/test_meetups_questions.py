@@ -15,7 +15,7 @@ class TestMeetups(BaseTest):
                 "meetup": "1",
                 "body": "What are the basic requirements that one needs when \
                 one training their dragon?",
-                "createdBy": "waithaka"
+                "createdBy": "123"
             }
             post_response = c.post('/api/v1/questions',
                                    json=question,
