@@ -30,8 +30,9 @@ def requires_token(route):
             if user is False:
                 return jsonify({
                     "status": 404,
-                    "error": "User with given credentials was not found on the system"
-                    })
+                    "error": "User with given credentials" \
+                    " was not found on the system"
+                    }), 404
         except Exception as e:
             return jsonify({
                 "status": 401,

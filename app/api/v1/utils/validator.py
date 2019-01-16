@@ -4,8 +4,10 @@ import re
 
 def valid_email(email):
     """Check if an email matches a regex pattern."""
-    if(re.match("^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$", email)):
-        return True
+    if(re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)", email)):
+        local_part = email.split('@')[0]
+        if re.match("^\\w+(\\d?)(\\.+(\\w|\\d))?$", local_part):
+            return True
     return False
 
 
@@ -41,3 +43,14 @@ def no_numbers(string):
         if check_string.isalpha():
             return True
         return False
+
+
+def required_length(string, field='', length=8):
+    """Check for a given number of characters in a string"""
+    check_string = is_empty(string)
+    if not check_string:
+        if len(string) < length:
+            length_error = "The {} field requires a minimum number of " \
+             "{} characters".format(field, length)
+            return length_error
+        return True

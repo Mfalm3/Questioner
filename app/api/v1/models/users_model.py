@@ -16,7 +16,15 @@ class UsersModel(BaseModel):
         super(UsersModel, self).__init__()
         self.db = init_db(user_db)
 
-    def user_obj(self, fname, lname, password, othername, email, phone_number, username, isAdmin=False):
+    def user_obj(self,
+                 fname,
+                 lname,
+                 password,
+                 othername,
+                 email,
+                 phone_number,
+                 username,
+                 isAdmin=False):
         """User object."""
 
         timestamp = datetime.datetime.now().strftime("%I:%M:%S%P %d %b %Y")
@@ -39,8 +47,7 @@ class UsersModel(BaseModel):
         current_user = [user for user in self.db if user['email'] == email]
         if current_user:
             return current_user[0]
-        else:
-            return False
+        return False
 
     def save(self, user):
         """Save a new user."""
@@ -53,19 +60,19 @@ class UsersModel(BaseModel):
             return jsonify({
                 "status": 400,
                 "error": "Fill in a name. No name should not be empty!"
-            })
+            }), 400
         if not no_numbers(fname) or not no_numbers(lname):
             return jsonify({
                 "status": 400,
                 "error": "Names should only contain alphabet characters!"
-            })
+            }), 400
 
         if valid_email(user['email']):
             if email_exists(email, self.db):
                 return jsonify({
                     "status": 409,
                     "error": "Email Already Exists. Perhaps you want to login?"
-                })
+                }), 409
             else:
                 if username_exists(username, self.db):
                     return jsonify({
@@ -76,10 +83,11 @@ class UsersModel(BaseModel):
                     return jsonify({
                         "status": 201,
                         "message": "User Created Successfully!",
-                        "user": self.db
+                        "user": user
                         }), 201
         else:
             return jsonify({
                 "status": 400,
-                "error": "Ensure your email is in the right format! eg. test@example.com"
+                "error": "Ensure your email is in the right " \
+                "format! eg. test@example.com"
             }), 400

@@ -10,6 +10,7 @@ class MeetupsModel(BaseModel):
 
     def __init__(self):
         """Initialize the Meetup model."""
+        super(MeetupsModel, self).__init__()
         self.db = init_db(meetup_db)
 
     def meetup(self, location, images, topic, happeningOn, tags):
