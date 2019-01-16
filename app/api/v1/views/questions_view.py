@@ -13,44 +13,44 @@ def post_question():
     required = ["title", "meetup", "body", "createdBy"]
     try:
         data = request.get_json()
+        for items in required:
+            if items not in data.keys():
+                return jsonify({
+                    "status": 400,
+                    "error": "Please provide the following fields. " \
+                     "`{}`".format(items)
+                })
+        for key, value in data.items():
+            if not value.replace(" ", "").strip():
+                return jsonify({
+                    "status": 400,
+                    "error": "{} is missing.".format(key)
+                    })
+        title = data.get("title")
+        meetup = data.get("meetup")
+        body = data.get("body")
+        created_by = data.get("createdBy")
+        if created_by:
+            if isinstance(created_by, str):
+                if not created_by.isdigit():
+                    return jsonify({
+                        "status": 400,
+                        "error": "Could not find user with the given Id"
+                    })
+            if isinstance(created_by, int):
+                created_by = created_by
+        new_question = QUESTION_MODEL.question(title=title,
+                                               body=body,
+                                               meetup=meetup,
+                                               author=created_by,
+                                               votes=0)
+        return QUESTION_MODEL.save(new_question)
     except Exception:
         return jsonify({
             "status": 400,
             "error": "Please provide the following fields. \
              {}".format([items for items in required])
         })
-    title = data.get("title")
-    meetup = data.get("meetup")
-    body = data.get("body")
-    createdBy = data.get("createdBy")
-
-    if not title:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format('title')
-            })
-    if not meetup:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format('meetup')
-            })
-    if not body:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format('body')
-            })
-    if not createdBy:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format('createdBy')
-            })
-    else:
-        new_question = QUESTION_MODEL.question(title=title,
-                                               body=body,
-                                               meetup=meetup,
-                                               author=createdBy,
-                                               votes=0)
-        return QUESTION_MODEL.save(new_question)
 
 
 @v1_questions_blueprint.route('/questions/<int:question_id>', methods=['GET'])
