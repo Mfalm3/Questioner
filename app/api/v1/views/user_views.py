@@ -29,73 +29,46 @@ def signup():
         ]
     try:
         data = request.get_json()
-        if data is None:
-            return jsonify({
-                "status": 400,
-                "error": "Please provide the required " \
-                "fields. {}".format([field for field in required])
-            }), 400
+        for field in required:
+            if field not in data.keys():
+                return jsonify({
+                    "status": 400,
+                    "error": "Please provide the following fields. " \
+                    "`{}`".format(field)
+                })
+        for key, value in data.items():
+            if key in [field for field in required]:
+                if not value.replace(" ", "").strip():
+                    return jsonify({
+                        "status": 400,
+                        "error": "{} is missing.".format(key)
+                        })
+
+        fname = data.get('firstname')
+        lname = data.get("lastname")
+        password = data.get("password")
+        other_name = data.get("othername") or ''
+        email = data.get("email")
+        phone = data.get("phoneNumber")
+        username = data.get("username")
+        isAdmin = data.get("isAdmin")
+
+        new_user = user.user_obj(
+            fname=fname,
+            lname=lname,
+            password=password,
+            othername=other_name,
+            email=email,
+            phone_number=phone,
+            username=username,
+            isAdmin=isAdmin)
+        return user.save(new_user)
     except Exception:
         return jsonify({
             "status": 400,
             "error": "Please provide the required " \
             "fields. {}".format([field for field in required])
         }), 400
-    fname = data.get('firstname')
-    lname = data.get("lastname")
-    password = data.get("password")
-    other_name = data.get("othername") or ''
-    email = data.get("email")
-    phone = data.get("phoneNumber")
-    username = data.get("username")
-    isAdmin = data.get("isAdmin")
-
-    if not fname:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("firstname")
-            }), 400
-    if not lname:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("lastname")
-        }), 400
-    if not password:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("password")
-        }), 400
-    if not email:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("email")
-            }), 400
-    if not phone:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("phoneNumber")
-            }), 400
-    if not username:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("username")
-        }), 400
-    if not isAdmin:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("isAdmin")
-            }), 400
-
-    new_user = user.user_obj(
-        fname=fname,
-        lname=lname,
-        password=password,
-        othername=other_name,
-        email=email,
-        phone_number=phone,
-        username=username,
-        isAdmin=isAdmin)
-    return user.save(new_user)
 
 
 @v1_user_blueprint.route('/login', methods=['POST'])
