@@ -20,16 +20,21 @@ def conn_link(link):
     return conn
 
 
-def init_db():
+def init_dbase():
     """Initialize the database"""
     link = DevelopmentConfig.DATABASE_URL
     conn = conn_link(link)
     cur = conn.cursor()
+    db_queries = tables_setup()
+
+    for table_query in db_queries:
+        cur.execute(table_query)
+    conn.commit()
     return conn
 
 
-def init_tests_db():
-    """Initialize the tests tatabase"""
+def init_tests_dbase():
+    """Initialize the tests database"""
     link = TestingConfig.DATABASE_TEST_URL
     conn = conn_link(link)
     cur = conn.cursor()
