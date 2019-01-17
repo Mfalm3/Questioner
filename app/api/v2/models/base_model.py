@@ -1,6 +1,6 @@
-""" Base model class"""
+""" Base model class v2"""
 
-from app.db import init_db
+from app.db import init_dbase
 
 
 class BaseModel(object):
@@ -8,4 +8,4 @@ class BaseModel(object):
 
     def __init__(self):
         """Initialize the base model class"""
-        self.db = init_db()
+        self.db = init_dbase()
