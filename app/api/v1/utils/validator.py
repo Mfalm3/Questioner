@@ -4,7 +4,7 @@ import re
 
 def valid_email(email):
     """Check if an email matches a regex pattern."""
-    if(re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)", email)):
+    if re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)", email):
         local_part = email.split('@')[0]
         if re.match("^\\w+(\\d?)(\\.+(\\w|\\d))?$", local_part):
             return True
@@ -25,6 +25,12 @@ def username_exists(username, db):
             return True
         return False
 
+
+def meetup_exists(topic, meetup_db):
+    for rows in meetup_db:
+        if rows["topic"] == topic:
+            return True
+        return False
 
 def is_empty(*args):
     """Check for empty strings"""

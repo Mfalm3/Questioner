@@ -52,6 +52,12 @@ class TestMeetup(BaseTest):
         with self.client as c:
 
             headers = {"Content-Type": self.mime_type}
+            self.meetup_payload2 = {
+                "topic": "Bootcamp 37 retreat",
+                "location": "Andela, Nairobi",
+                "happeningOn": "2:00pm 6th Feb 2019",
+                "tags": ["django,flask"]
+                    }
             c.post('/api/v1/signup',
                    json=self.user1,
                    headers=headers)
@@ -138,6 +144,12 @@ class TestMeetup(BaseTest):
         """Test for rsvp to a meetup"""
         with self.client as c:
             headers = {"Content-Type": self.mime_type}
+            self.meetup_payload = {
+                "topic": "Bootcamp 35 rovers",
+                "location": "Andela, Nairobi",
+                "happeningOn": "2:00pm 6th Feb 2019",
+                "tags": ["django,flask"]
+                    }
             c.post('/api/v1/signup',
                    json=self.user1,
                    headers=headers)

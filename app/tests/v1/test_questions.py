@@ -36,7 +36,7 @@ class TestQuetions(unittest.TestCase):
             "meetup": "1",
             "body": "What are the basic requirements that one " \
             "needs when one training their dragon?",
-            "createdBy": "waithaka"
+            "createdBy": "123"
 }
 
     def tearDown(self):
@@ -48,6 +48,12 @@ class TestQuetions(unittest.TestCase):
         # sign up
         with self.client as c:
             headers = {"Content-type": 'application/json'}
+            self.meetup_payload = {
+                "topic": "Bootcamp and workshops",
+                "location": "Andela, Nairobi",
+                "happeningOn": "2:00pm 6th Feb 2019",
+                "tags": ["django,flask"]
+                    }
             signup_repsonse = c.post('api/v1/signup',
                                      json=self.admin_user,
                                      headers=headers)

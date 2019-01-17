@@ -11,7 +11,7 @@ def method_not_allowed(error):
     return jsonify({
         'error': str(error),
         'status': 405
-        }), 500
+        }), 405
 
 
 def resource_not_found(error):
@@ -23,7 +23,7 @@ def resource_not_found(error):
 
 
 def internal_server_error(error):
-    """Error handler for url not found"""
+    """Error handler internal server error"""
     return jsonify({
         'error': str(error),
         'status': 500
