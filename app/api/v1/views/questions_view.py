@@ -20,12 +20,12 @@ def post_question():
                     "error": "Please provide the following fields. " \
                      "`{}`".format(items)
                 })
-        for key, value in data.items():
-            if not value.replace(" ", "").strip():
-                return jsonify({
-                    "status": 400,
-                    "error": "{} is missing.".format(key)
-                    })
+            for key, value in data.items():
+                if not value.replace(" ", "").strip():
+                    return jsonify({
+                        "status": 400,
+                        "error": "{} is missing.".format(key)
+                        })
         title = data.get("title")
         meetup = data.get("meetup")
         body = data.get("body")
@@ -35,10 +35,19 @@ def post_question():
                 if not created_by.isdigit():
                     return jsonify({
                         "status": 400,
-                        "error": "Could not find user with the given Id"
+                        "error": "Can only pass digits for user id!"
                     })
             if isinstance(created_by, int):
                 created_by = created_by
+        if meetup:
+            if isinstance(meetup, str):
+                if not meetup.isdigit():
+                    return jsonify({
+                        "status": 400,
+                        "error": "Can only pass digits for meetup id!"
+                    })
+            if isinstance(meetup, int):
+                meetup = meetup
         new_question = QUESTION_MODEL.question(title=title,
                                                body=body,
                                                meetup=meetup,
