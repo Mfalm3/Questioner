@@ -2,17 +2,6 @@
 import psycopg2 as pg2
 from instance.config import DevelopmentConfig, TestingConfig
 
-db0 = []
-user_db = []
-meetup_db = []
-question_db = []
-comment_db = []
-test_db = []
-
-
-def init_db(db=db0):
-    database = db
-    return database
 
 def conn_link(link):
     """Creating a connection"""
