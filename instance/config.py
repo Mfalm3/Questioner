@@ -11,11 +11,16 @@ class Config(object):
 class DevelopmentConfig(Config):
     """Configurations for Development"""
     DEBUG = True
+    DATABASE_URL = "dbname='qmeetups_db' host='localhost' port='5432' " \
+                   "user='waithaka' password='postgres'"
+
 
 
 class TestingConfig(Config):
     """Configurations for Testing"""
     DEBUG = True
+    DATABASE_TEST_URL = "dbname='qmeetups_tests_db' host='localhost' "\
+                        "port='5432' user='waithaka' password='postgres'"
 
 
 class ProductionConfig(Config):
