@@ -13,6 +13,7 @@ the_meetup = MeetupsModel()
 @requires_token
 def create_meetup(user):
     """Create a meetup route."""
+    required = ['topic', 'location', 'happeningOn', 'tags']
     if not user['isAdmin'] == "True":
         return jsonify({
             "status": 403,
@@ -20,7 +21,13 @@ def create_meetup(user):
         }), 403
     try:
         data = request.get_json()
-
+        for item in required:
+            if item not in data.keys():
+                return jsonify({
+                    'status': 400,
+                    'error': "Please provide the following fields. "\
+                    "`{}`".format(item)
+                })
         for key, value in data.items():
             if isinstance(value, str):
                 if is_empty(value):
@@ -117,27 +124,28 @@ def rsvp_a_meetup(user, meetup_id):
     meetup = meetup_id
     user = user['id']
     required = ["yes", "no", "maybe"]
+    required_key = ["response"]
     try:
         data = request.get_json()
         resp = data.get('response')
-
-        for key, value in data.items():
-            if key != "response":
-                return jsonify({
-                    "status": 400,
-                    "error": "Please provide the following" \
-                    "fields. {}".format('response')
-                }), 400
-            if value not in required:
-                return jsonify({
-                    "status": 400,
-                    "error": "Only the following responses are allowed. " \
-                     "{}".format([item for item in required])
+        for fields in required_key:
+            for key, value in data.items():
+                if fields not in data.keys():
+                    return jsonify({
+                        "status": 400,
+                        "error": "Please provide the following " \
+                        "fields. `{}`".format('response')
                     }), 400
-            new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
-            return the_meetup.create_rsvp(rsvp=new_rsvp)
+                if value not in required:
+                    return jsonify({
+                        "status": 400,
+                        "error": "Only the following responses are allowed. " \
+                        "{}".format([item for item in required])
+                        }), 400
+                new_rsvp = the_meetup.rsvp(meetup=meetup, user=user, response=resp)
+                return the_meetup.create_rsvp(rsvp=new_rsvp)
 
-    except Exception as e:
+    except Exception:
         return jsonify({
             "status": 404,
             "error": "The meetup of the given id is not found"
