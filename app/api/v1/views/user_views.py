@@ -35,14 +35,14 @@ def signup():
                     "status": 400,
                     "error": "Please provide the following fields. " \
                     "`{}`".format(field)
-                })
+                }), 400
         for key, value in data.items():
             if key in [field for field in required]:
                 if not value.replace(" ", "").strip():
                     return jsonify({
                         "status": 400,
                         "error": "{} is missing.".format(key)
-                        })
+                        }), 400
 
         fname = data.get('firstname')
         lname = data.get("lastname")
@@ -80,16 +80,20 @@ def login():
         email = data.get('email')
         password = data.get('password')
 
-        if is_empty(email):
-            return jsonify({
-                "status": 400,
-                "error": "email is missing."
-            }), 400
-        if is_empty(password):
-            return jsonify({
-                "status": 400,
-                "error": "password is missing."
-            }), 400
+        for field in required:
+            if field not in data.keys():
+                return jsonify({
+                    "status": 400,
+                    "error": "Please provide the following fields. " \
+                    "`{}`".format(field)
+                }), 400
+        for key, value in data.items():
+            if key in [field for field in required]:
+                if not value.replace(" ", "").strip():
+                    return jsonify({
+                        "status": 400,
+                        "error": "{} is missing.".format(key)
+                        }), 400
 
         if valid_email(email):
             if email_exists(email, user_db):
@@ -128,7 +132,7 @@ def login():
             return jsonify({
                 "status": 400,
                 "error": "Email invalid"
-            })
+            }), 400
 
     except Exception:
         return jsonify({
