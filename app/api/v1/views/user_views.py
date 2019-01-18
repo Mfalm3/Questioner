@@ -122,6 +122,10 @@ def login():
                             Please sign in again!",
                             "token": token.decode('utf-8')
                             }), 401
+                return jsonify({
+                    "status": 400,
+                    "error": "Email/Password is invalid. Please check your credentials"
+                    }), 400
 
             else:
                 return jsonify({
