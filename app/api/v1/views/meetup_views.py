@@ -147,6 +147,7 @@ def rsvp_a_meetup(user, meetup_id):
 
     except Exception:
         return jsonify({
-            "status": 404,
-            "error": "The meetup of the given id is not found"
-            }), 404
+            "status": 400,
+            "error": "Please provide the following " \
+            "fields. `{}`".format('response')
+            }), 400
