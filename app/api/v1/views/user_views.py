@@ -74,56 +74,65 @@ def signup():
 @v1_user_blueprint.route('/login', methods=['POST'])
 def login():
     """Log in route."""
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+    required = ['email','password']
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
-    if is_empty(email):
-        return jsonify({
-            "status": 400,
-            "error": "email is missing."
-        }), 400
-    if is_empty(password):
-        return jsonify({
-            "status": 400,
-            "error": "password is missing."
-        }), 400
+        if is_empty(email):
+            return jsonify({
+                "status": 400,
+                "error": "email is missing."
+            }), 400
+        if is_empty(password):
+            return jsonify({
+                "status": 400,
+                "error": "password is missing."
+            }), 400
 
-    if valid_email(email):
-        if email_exists(email, user_db):
-            cur_user = user.get_user(email)
-            if cur_user and \
-                    check_password_hash(
-                            cur_user.get('password'), password):
-                data = {
-                    "email": email,
-                    "sub": email,
-                    "exp": datetime.datetime.now()
-                           + datetime.timedelta(minutes=5)
-                }
-                token = jwt.encode(data, enc_key, algorithm='HS256')
+        if valid_email(email):
+            if email_exists(email, user_db):
+                cur_user = user.get_user(email)
+                if cur_user and \
+                        check_password_hash(
+                                cur_user.get('password'), password):
+                    data = {
+                        "email": email,
+                        "sub": email,
+                        "exp": datetime.datetime.now()
+                               + datetime.timedelta(minutes=5)
+                    }
+                    token = jwt.encode(data, enc_key, algorithm='HS256')
 
-                if token:
-                    return jsonify({
-                        "status": 200,
-                        "message": "Logged in successfully!",
-                        "token": token.decode('utf-8')
-                        }), 200
-                else:
-                    return jsonify({
-                        "status": 401,
-                        "error": "Could not verify token. \
-                        Please sign in again!",
-                        "token": token.decode('utf-8')
-                        }), 401
+                    if token:
+                        return jsonify({
+                            "status": 200,
+                            "message": "Logged in successfully!",
+                            "token": token.decode('utf-8')
+                            }), 200
+                    else:
+                        return jsonify({
+                            "status": 401,
+                            "error": "Could not verify token. \
+                            Please sign in again!",
+                            "token": token.decode('utf-8')
+                            }), 401
 
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "No user found with the given credentials"
+                    }), 400
         else:
             return jsonify({
                 "status": 400,
-                "error": "No user found with the given credentials"
-                }), 400
-    else:
+                "error": "Email invalid"
+            })
+
+    except Exception:
         return jsonify({
             "status": 400,
-            "error": "Email invalid"
-        })
+            "error": "Please provide the required " \
+            "fields. {}".format([field for field in required])
+        }), 400
