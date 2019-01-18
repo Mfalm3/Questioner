@@ -57,8 +57,8 @@ def post_question():
     except Exception:
         return jsonify({
             "status": 400,
-            "error": "Please provide the following fields. \
-             {}".format([items for items in required])
+            "error": "Please provide the following fields. " \
+            "{}".format([items for items in required])
         })
 
 
