@@ -1,0 +1,6 @@
+export FLASK_APP="run.py"
+export FLASK_DEBUG="1"
+export FLASK_ENV="development"
+export SECRET_KEY="MyVerySecretKey9102"
+export DATABASE_URL="dbname='qmeetups_db' host='localhost' port='5432' user='waithaka' password='postgres'"
+export DATABASE_TEST_URL="dbname='qmeetups_tests_db' host='localhost' port='5432' user='waithaka' password='postgres'"
