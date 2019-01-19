@@ -1,15 +1,18 @@
 # Questions Views.
 from flask import Blueprint, request, jsonify
 from ..models.questions_model import QuestionModel
+from app.api.v1.models.meetups_model import MeetupsModel
 from app.api.v1.utils.utils import requires_token
 
 
 v1_questions_blueprint = Blueprint('v1_q', __name__, url_prefix='/api/v1')
 QUESTION_MODEL = QuestionModel()
+MEETUP = MeetupsModel()
 
 
 @v1_questions_blueprint.route('/questions', methods=['POST'])
-def post_question():
+@requires_token
+def post_question(user):
     """Post a question route."""
     required = ["title", "meetup", "body", "createdBy"]
     try:
@@ -20,24 +23,24 @@ def post_question():
                     "status": 400,
                     "error": "Please provide the following fields. " \
                      "`{}`".format(items)
-                })
+                }), 400
             for key, value in data.items():
                 if not value.replace(" ", "").strip():
                     return jsonify({
                         "status": 400,
                         "error": "{} is missing.".format(key)
-                        })
+                        }), 400
         title = data.get("title")
         meetup = data.get("meetup")
         body = data.get("body")
-        created_by = data.get("createdBy")
+        created_by = user.get("id")
         if created_by:
             if isinstance(created_by, str):
                 if not created_by.isdigit():
                     return jsonify({
                         "status": 400,
                         "error": "Can only pass digits for user id!"
-                    })
+                    }), 400
             if isinstance(created_by, int):
                 created_by = created_by
         if meetup:
@@ -46,21 +49,22 @@ def post_question():
                     return jsonify({
                         "status": 400,
                         "error": "Can only pass digits for meetup id!"
-                    })
+                    }), 400
+                meetup = int(meetup)
             if isinstance(meetup, int):
                 meetup = meetup
+        meetup = MEETUP.get_meetup(meetup)
         new_question = QUESTION_MODEL.question(title=title,
                                                body=body,
                                                meetup=meetup,
                                                author=created_by,
                                                votes=0)
         return QUESTION_MODEL.save(new_question)
-    except Exception:
+    except Exception as e:
         return jsonify({
             "status": 400,
-            "error": "Please provide the following fields. " \
-            "{}".format([items for items in required])
-        })
+            "error": str(e)+" "+str(user)
+        }), 400
 
 
 @v1_questions_blueprint.route('/questions/<int:question_id>', methods=['GET'])
@@ -99,12 +103,12 @@ def upvote(user,question_id):
             return jsonify({
                 "status": 400,
                 "error": "You can only vote once!"
-            })
+            }), 400
         return jsonify({
             "status": 200,
             "message": "Question upvoted successfully!",
             "question": updated_votes
-        })
+        }), 200
 
     except Exception as e:
         return jsonify({
@@ -125,12 +129,12 @@ def downvote(user, question_id):
             return jsonify({
                 "status": 400,
                 "error": "You can only vote once!"
-            })
+            }), 400
         return jsonify({
             "status": 200,
             "message": "Question upvoted successfully!",
             "question": downvoted_votes
-        })
+        }), 200
 
     except Exception:
         return jsonify({
