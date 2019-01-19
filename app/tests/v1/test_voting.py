@@ -12,10 +12,10 @@ class TestVoting(BaseTest):
 
             headers = {"Content-Type": self.mime_type}
             c.post('/api/v1/signup',
-                   json=self.user1,
+                   json=self.user0,
                    headers=headers)
             login = c.post('/api/v1/login',
-                           json=self.login_payload,
+                           json=self.login_payload1,
                            headers=headers)
             login_resp = json.loads(login.data.decode('utf-8'))
 
