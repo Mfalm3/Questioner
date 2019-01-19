@@ -42,14 +42,22 @@ class QuestionModel(BaseModel):
         query = self.db[question_id - 1]
         return query
 
-    def upvote(self, question):
+    def upvote(self,user, question):
         """Upvote a question method."""
         query = question
-        query['votes'] += 1
+        if query.get('user') is None:
+            query['votes'] += 1
+            query.update({'user':{'id':user['id'], 'hasvoted': 1}})
+        elif query['user'].get('hasvoted') == 1:
+            return False
         return query
 
-    def downvote(self, question):
+    def downvote(self, user, question):
         """Downvote a question method."""
         query = question
-        query['votes'] -= 1
+        if query.get('user') is None:
+            query['votes'] -= 1
+            query.update({'user':{'id':user['id'], 'hasvoted': 1}})
+        elif query['user'].get('hasvoted') == 1:
+            return False
         return query
