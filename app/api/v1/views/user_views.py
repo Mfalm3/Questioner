@@ -27,6 +27,7 @@ def signup():
         "username",
         "isAdmin"
         ]
+    my_booleans = ['True', 'true', 'yes', 1, 'y']
     try:
         data = request.get_json()
         for field in required:
@@ -51,8 +52,14 @@ def signup():
         email = data.get("email")
         phone = data.get("phoneNumber")
         username = data.get("username")
-        isAdmin = data.get("isAdmin")
-
+        is_admin = data.get("isAdmin")
+        if is_admin in my_booleans:
+            is_admin = True
+        else:
+            return jsonify({
+            "status": 400,
+            "error": "Wrong parameter supplied for `isAdmin`"
+        }),400
         new_user = user.user_obj(
             fname=fname,
             lname=lname,
@@ -61,7 +68,7 @@ def signup():
             email=email,
             phone_number=phone,
             username=username,
-            isAdmin=isAdmin)
+            isAdmin=is_admin)
         return user.save(new_user)
     except Exception:
         return jsonify({
