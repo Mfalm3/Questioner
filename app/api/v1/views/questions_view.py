@@ -1,6 +1,7 @@
 # Questions Views.
 from flask import Blueprint, request, jsonify
 from ..models.questions_model import QuestionModel
+from app.api.v1.utils.utils import requires_token
 
 
 v1_questions_blueprint = Blueprint('v1_q', __name__, url_prefix='/api/v1')
@@ -88,34 +89,46 @@ def get_meetup_question(question_id):
 
 @v1_questions_blueprint.route('/questions/<int:question_id>/upvote',
                               methods=['PATCH'])
-def upvote(question_id):
+@requires_token
+def upvote(user,question_id):
     """Upvote a specific question."""
     try:
         query = QUESTION_MODEL.get_question(question_id)
-        updated_votes = QUESTION_MODEL.upvote(query)
+        updated_votes = QUESTION_MODEL.upvote(user, query)
+        if updated_votes is False:
+            return jsonify({
+                "status": 400,
+                "error": "You can only vote once!"
+            })
         return jsonify({
             "status": 200,
             "message": "Question upvoted successfully!",
             "question": updated_votes
         })
 
-    except Exception:
+    except Exception as e:
         return jsonify({
             "status": 404,
-            "error": "The question of the given id is not found"
+            "error": "The question of the given id is not found"+str(e)
                 }), 404
 
 
 @v1_questions_blueprint.route('/questions/<int:question_id>/downvote',
                               methods=['PATCH'])
-def downvote(question_id):
+@requires_token
+def downvote(user, question_id):
     """Downvote a specific question."""
     try:
         query = QUESTION_MODEL.get_question(question_id)
-        downvoted_votes = QUESTION_MODEL.downvote(query)
+        downvoted_votes = QUESTION_MODEL.downvote(user, query)
+        if downvoted_votes is False:
+            return jsonify({
+                "status": 400,
+                "error": "You can only vote once!"
+            })
         return jsonify({
             "status": 200,
-            "message": "Question downvoted successfully!",
+            "message": "Question upvoted successfully!",
             "question": downvoted_votes
         })
 
