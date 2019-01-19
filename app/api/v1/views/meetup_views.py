@@ -14,7 +14,7 @@ the_meetup = MeetupsModel()
 def create_meetup(user):
     """Create a meetup route."""
     required = ['topic', 'location', 'happeningOn', 'tags']
-    if not user['isAdmin'] == "True":
+    if not user['isAdmin'] is True:
         return jsonify({
             "status": 403,
             "error": "Action requires Admin Priviledges"
