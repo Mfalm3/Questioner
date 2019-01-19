@@ -27,7 +27,8 @@ def signup():
         "username",
         "isAdmin"
         ]
-    my_booleans = ['True', 'true', 'yes', 1, 'y']
+    my_true_booleans = ['True', 'true', 't', 'yes', 1, 'y', 'Y']
+    my_false_booleans = ['False', 'false','f', 'no', 0, 'n', 'N']
     try:
         data = request.get_json()
         for field in required:
@@ -53,8 +54,10 @@ def signup():
         phone = data.get("phoneNumber")
         username = data.get("username")
         is_admin = data.get("isAdmin")
-        if is_admin in my_booleans:
+        if is_admin in my_true_booleans:
             is_admin = True
+        elif is_admin in my_false_booleans:
+            is_admin = False
         else:
             return jsonify({
             "status": 400,
