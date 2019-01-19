@@ -32,9 +32,11 @@ class QuestionModel(BaseModel):
         """Store a question method."""
         db = self.db
         db.append(question)
+        data = question
         return jsonify({
             "status": 201,
-            "message": "Question posted successfully!"
+            "message": "Question posted successfully!",
+            "data": data
         })
 
     def get_question(self, question_id):
