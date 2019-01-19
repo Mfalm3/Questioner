@@ -88,7 +88,7 @@ class TestQuetions(unittest.TestCase):
         with self.client as c:
             postmeetup_question_response = c.post("/api/v1/questions",
                                                   json=self.question_payload0,
-                                                  headers=headers)
+                                                  headers=header_extra)
             result1 = json.loads(postmeetup_question_response.data.decode('utf-8'))
             self.assertEqual(result1['message'],
                              "Question posted successfully!")
