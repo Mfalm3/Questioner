@@ -94,7 +94,7 @@ def get_meetup_question(question_id):
 @v1_questions_blueprint.route('/questions/<int:question_id>/upvote',
                               methods=['PATCH'])
 @requires_token
-def upvote(user,question_id):
+def upvote(user, question_id):
     """Upvote a specific question."""
     try:
         query = QUESTION_MODEL.get_question(question_id)
