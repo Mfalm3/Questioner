@@ -134,7 +134,7 @@ def rsvp_a_meetup(user, meetup_id):
                     return jsonify({
                         "status": 400,
                         "error": "Please provide the following " \
-                        "fields. `{}`".format('response')
+                        "fields. `{}`".format(key)
                     }), 400
                 if value not in required:
                     return jsonify({
