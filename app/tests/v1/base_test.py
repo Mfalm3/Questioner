@@ -11,6 +11,18 @@ class BaseTest(unittest.TestCase):
     def setUp(self):
         self.client = create_app('testing').test_client()
         self.mime_type = 'application/json'
+        self.user0 = {
+            "id": 1,
+            "firstname": "Joe",
+            "lastname": "Waithaka",
+            "password": "password",
+            "othername": "JW",
+            "email": "test.er@gmail.com",
+            "phoneNumber": "254722222222",
+            "username": "waithaks",
+            "registered": datetime.datetime.now().strftime("%I:%M%p %d %b %Y"),
+            "isAdmin": "True",
+        }
         self.user1 = {
             "id": 1,
             "firstname": "Joe",
@@ -18,7 +30,7 @@ class BaseTest(unittest.TestCase):
             "password": "password",
             "othername": "JW",
             "email": "test@gmail.com",
-            "phoneNumber": "254722222222",
+            "phoneNumber": "254722682222",
             "username": "waithaka",
             "registered": datetime.datetime.now().strftime("%I:%M%p %d %b %Y"),
             "isAdmin": "True",
@@ -26,6 +38,10 @@ class BaseTest(unittest.TestCase):
         self.login_payload = {
             "email": self.user1['email'],
             "password": self.user1['password']
+        }
+        self.login_payload1 = {
+            "email": self.user0['email'],
+            "password": self.user0['password']
         }
         self.meetup_payload = {
             "topic": "Bootcamp 36 retreat",
