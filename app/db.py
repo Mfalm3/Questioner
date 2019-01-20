@@ -17,10 +17,10 @@ def conn_link(link):
 def init_dbase(url=None):
     """Initialize the database"""
     if url is None:
-        link = DATABASE_LINKS['development']
-    elif url == "testing":
-        link = DATABASE_LINKS['development']
-    conn = conn_link(link)
+        url = DATABASE_LINKS['development']
+    url = DATABASE_LINKS['testing']
+
+    conn = conn_link(url)
     cur = conn.cursor()
     db_queries = tables_setup()
 
@@ -63,7 +63,7 @@ def tables_setup():
 
     table3 = "CREATE TABLE IF NOT EXISTS meetup_questions_comments " \
              "(comment_id serial PRIMARY KEY, " \
-             "question_id INTEGER REFERENCES meetups_questions(question_id), " \
+             "question_id INTEGER REFERENCES meetup_questions(question_id), " \
              "comment_body character varying(128));"
 
     tables.extend([table0, table1, table2, table3])
