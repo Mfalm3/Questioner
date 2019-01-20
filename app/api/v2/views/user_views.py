@@ -71,10 +71,12 @@ def signup():
             phone_number=phone,
             username=username,
             is_admin=is_admin)
-        response = new_user.save()
+        data = new_user.save()
         return jsonify({
             "status": 201,
-            "message": response
+            "message": "User `{}` created "
+            "successfully!".format(data['username']),
+            "data": [data]
         }), 201
 
     except Exception as e:
