@@ -8,6 +8,13 @@ install:
   - pip install coveralls
   - pip install codeclimate-test-reporter
 
+services:
+  - postgresql
+
+before_script:
+    - psql -c 'CREATE DATABASE qmeetups_tests_db;' -U postgres
+    - export DATABASE_TEST_URL="dbname='qmeetups_tests_db' user='postgres' host='localhost' password=''"
+
 env:
   - FLASK_VERSION=1.0.2
 
