@@ -42,6 +42,15 @@ class UsersModel(BaseModel):
         cur.execute(store)
         conn.commit()
         conn.close()
-        response = "User `{}` created successfully!".format(self.username)
+        user = {
+            "firstname": self.fname,
+            "lastname": self.lname,
+            "othername": self.other_name,
+            "email": self.email,
+            "phoneNumber": self.phone_number,
+            "username": self.username,
+            "isAdmin": self.is_admin,
+            "registered_at": datetime.datetime.now()
+        }
 
-        return response
+        return user
