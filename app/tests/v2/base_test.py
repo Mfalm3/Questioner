@@ -1,33 +1,42 @@
-"""Base test file"""
+"""Base test class"""
 import unittest
 from app import create_app
 from app.db import init_dbase, tables_tear_down
 
 
 class BaseTest(unittest.TestCase):
-    """Base test class"""
+    """Initialize the Base test"""
 
     def setUp(self):
-        """Test set up configs. Run before each test"""
         self.app = create_app('testing')
         self.client = self.app.test_client()
+        with self.app.app_context():
+            self.db = init_dbase(url='testing')
+        self.signup_url = 'api/v2/auth/signup'
         self.mime_type = "application/json"
-        self.signup_url = "api/v2/auth/signup"
         self.signup_payload0 = {
             "firstname": "J",
             "lastname": "Waithaka",
             "password": "password",
             "othername": "JW",
-            "email": "test@gmail.com",
+            "email": "tes.t@gmail.com",
             "phoneNumber": "254722222222",
             "username": "waithaka",
             "registered": "now",
             "isAdmin": "True"
         }
-        with self.app.app_context():
-            self.db = init_dbase('testing')
+        self.signup_payload1 = {
+            "firstname": "Jose",
+            "lastname": "Waithaka",
+            "password": "password",
+            "othername": "JW",
+            "email": "joseph@gmail.com",
+            "phoneNumber": "254722222222",
+            "username": "Joseph",
+            "registered": "now",
+            "isAdmin": "False"
+        }
 
     def tearDown(self):
-        with self.app.app_context():
-            self.db = tables_tear_down()
         self.client = None
+        self.db = tables_tear_down()
