@@ -8,4 +8,4 @@ class BaseModel(object):
 
     def __init__(self):
         """Initialize the base model class"""
-        self.db = init_dbase()
+        pass
