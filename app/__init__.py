@@ -2,6 +2,7 @@
 from flask import Flask, jsonify
 from app.api.v2.views.api_views import v2_user_bp, v2_meetup_bp, v2_question_bp
 from instance.config import app_config
+from app.db import init_dbase
 
 
 def method_not_allowed(error):
@@ -45,4 +46,5 @@ def create_app(config='development'):
     app.register_error_handler(404, resource_not_found)
     app.register_error_handler(500, internal_server_error)
 
+    init_dbase(app)
     return app
