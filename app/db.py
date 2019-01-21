@@ -1,9 +1,11 @@
 """Set up database connection"""
+import os
 import psycopg2 as pg2
+from flask import current_app as app
 from instance.config import DevelopmentConfig, TestingConfig
 
 DATABASE_LINKS = {
-    'testing': TestingConfig.DATABASE_TEST_URL,
+    'testing': TestingConfig.DATABASE_URL,
     'development': DevelopmentConfig.DATABASE_URL
 }
 
@@ -14,11 +16,10 @@ def conn_link(link):
     return conn
 
 
-def init_dbase(url=None):
+def init_dbase(app):
     """Initialize the database"""
-    if url is None:
-        url = DATABASE_LINKS['development']
-    url = DATABASE_LINKS['testing']
+    url = app.config.get('DATABASE_URL')
+    print(url)
 
     conn = conn_link(url)
     cur = conn.cursor()
@@ -28,6 +29,24 @@ def init_dbase(url=None):
         cur.execute(table_query)
     conn.commit()
     return conn
+
+
+def database_transactions(query):
+    conn = init_dbase(app)
+    if isinstance(query, list):
+        for sql in query:
+            # conn = conn_link(link)
+            cur = conn.cursor()
+            cur.execute(sql)
+        conn.commit()
+
+    if isinstance(query, str):
+        # conn = conn_link(link)
+        cur = conn.cursor()
+        cur.execute(query)
+        conn.commit()
+
+    return cur
 
 
 def tables_setup():
