@@ -1,7 +1,7 @@
 """Base test class"""
 import unittest
 from app import create_app
-from app.db import init_dbase, tables_tear_down
+from app.db import tables_tear_down
 
 
 class BaseTest(unittest.TestCase):
@@ -10,8 +10,6 @@ class BaseTest(unittest.TestCase):
     def setUp(self):
         self.app = create_app('testing')
         self.client = self.app.test_client()
-        with self.app.app_context():
-            self.db = init_dbase(url='testing')
         self.signup_url = 'api/v2/auth/signup'
         self.mime_type = "application/json"
         self.signup_payload0 = {
