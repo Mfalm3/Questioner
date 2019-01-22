@@ -1,25 +1,22 @@
 """Set up database connection"""
 import os
 import psycopg2 as pg2
+from psycopg2.extras import RealDictCursor
 from flask import current_app as app
-from instance.config import DevelopmentConfig, TestingConfig
-
-DATABASE_LINKS = {
-    'testing': TestingConfig.DATABASE_URL,
-    'development': DevelopmentConfig.DATABASE_URL
-}
 
 
 def conn_link(link):
     """Creating a connection"""
-    conn = pg2.connect(link)
+    try:
+        conn = pg2.connect(link, cursor_factory=RealDictCursor)
+    except Exception as error:
+        return "Database connection error" + error
     return conn
 
 
 def init_dbase(app):
     """Initialize the database"""
     url = app.config.get('DATABASE_URL')
-    print(url)
 
     conn = conn_link(url)
     cur = conn.cursor()
@@ -35,13 +32,10 @@ def database_transactions(query):
     conn = init_dbase(app)
     if isinstance(query, list):
         for sql in query:
-            # conn = conn_link(link)
             cur = conn.cursor()
             cur.execute(sql)
-        conn.commit()
-
-    if isinstance(query, str):
-        # conn = conn_link(link)
+            conn.commit()
+    elif isinstance(query, str):
         cur = conn.cursor()
         cur.execute(query)
         conn.commit()
@@ -85,19 +79,24 @@ def tables_setup():
              "question_id INTEGER REFERENCES meetup_questions(question_id), " \
              "comment_body character varying(128));"
 
-    tables.extend([table0, table1, table2, table3])
+    table4 = "CREATE TABLE IF NOT EXISTS blacklisted_tokens " \
+             "(token_id serial PRIMARY KEY, " \
+             " blacklisted_token character varying(256) NOT NULL); "
+
+    tables.extend([table0, table1, table2, table3, table4])
     return tables
 
 
-def tables_tear_down():
+def tables_tear_down(app):
     """Initialize test teardowns"""
     tears = []
     users = " DROP TABLE IF EXISTS users CASCADE"
     meetups = " DROP TABLE IF EXISTS meetups CASCADE"
     questions = " DROP TABLE IF EXISTS meetup_questions CASCADE"
     comments = " DROP TABLE IF EXISTS meetup_questions_comments CASCADE"
+    comments = " DROP TABLE IF EXISTS blacklisted_token CASCADE"
     tears.extend([users, meetups, questions, comments])
-    conn = conn_link(DATABASE_LINKS['testing'])
+    conn = conn_link(app.config.get('DATABASE_URL'))
     cur = conn.cursor()
     try:
         for tear in tears:
@@ -105,4 +104,3 @@ def tables_tear_down():
             conn.commit()
     except Exception as e:
         print(e)
-    return conn
