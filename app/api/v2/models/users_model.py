@@ -49,3 +49,14 @@ class UsersModel(BaseModel):
         }
 
         return user
+
+    @staticmethod
+    def get_user(email):
+        try:
+            sql = "SELECT * FROM users where email = '{}';".format(email)
+
+            cur = database_transactions(sql)
+            user = cur.fetchone()
+            return user
+        except Exception as e:
+            raise e
