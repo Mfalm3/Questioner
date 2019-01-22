@@ -2,7 +2,7 @@
 import datetime
 from werkzeug.security import generate_password_hash
 from app.api.v2.models.base_model import BaseModel
-from app.db import init_dbase
+from app.db import database_transactions
 
 
 class UsersModel(BaseModel):
@@ -20,7 +20,6 @@ class UsersModel(BaseModel):
         self.username = username
         self.is_admin = is_admin
         self.other_name = other_name
-        self.db = init_dbase()
 
     def hashed_pw(self, password):
         """Passsword hasher"""
@@ -37,11 +36,7 @@ class UsersModel(BaseModel):
             datetime.datetime.now()
         )
 
-        conn = self.db
-        cur = conn.cursor()
-        cur.execute(store)
-        conn.commit()
-        conn.close()
+        database_transactions(store)
         user = {
             "firstname": self.fname,
             "lastname": self.lname,
@@ -54,3 +49,14 @@ class UsersModel(BaseModel):
         }
 
         return user
+
+    @staticmethod
+    def get_user(email):
+        try:
+            sql = "SELECT * FROM users where email = '{}';".format(email)
+
+            cur = database_transactions(sql)
+            user = cur.fetchone()
+            return user
+        except Exception as e:
+            raise e

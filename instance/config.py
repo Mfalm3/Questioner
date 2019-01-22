@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+
 class Config(object):
     """Base Config Class"""
     DEBUG = False
@@ -16,11 +17,10 @@ class DevelopmentConfig(Config):
     DATABASE_URL = os.getenv('DATABASE_URL')
 
 
-
 class TestingConfig(Config):
     """Configurations for Testing"""
     DEBUG = True
-    DATABASE_TEST_URL = os.getenv("DATABASE_TEST_URL")
+    DATABASE_URL = os.getenv("DATABASE_TEST_URL")
 
 
 class ProductionConfig(Config):

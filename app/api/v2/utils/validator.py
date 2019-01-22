@@ -1,6 +1,6 @@
 # Validators
 import re
-from app.db import init_dbase
+from app.db import database_transactions
 
 
 def valid_email(email):
@@ -18,10 +18,8 @@ def check_if_exists(table='', column='', data=''):
     SELECT * from {} WHERE {} = '{}' LIMIT 1;
     """.format(table, column, data)
 
-    conn = init_dbase()
-    cur = conn.cursor()
-    cur.execute(sql)
-    row = cur.fetchone()
-    if row:
+    cur = database_transactions(sql)
+    exists = cur.fetchone()
+    if exists:
         return True
     return False
