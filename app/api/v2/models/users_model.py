@@ -30,14 +30,16 @@ class UsersModel(BaseModel):
         store = """
         INSERT INTO users(firstname, lastname, othername, email,
         password, phoneNumber, username, isAdmin, registered ) VALUES (
-        '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')""".format(
+        '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+        returning user_id""".format(
             self.fname, self.lname, self.other_name, self.email,
             self.password, self.phone_number, self.username, self.is_admin,
             datetime.datetime.now()
         )
 
-        database_transactions(store)
+        id = database_transactions(store)
         user = {
+            "id": id.fetchone()['user_id'],
             "firstname": self.fname,
             "lastname": self.lname,
             "othername": self.other_name,
