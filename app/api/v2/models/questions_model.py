@@ -31,3 +31,15 @@ class QuestionModel(BaseModel):
             "user": self.user
         }
         return data
+
+    @staticmethod
+    def get_question(question_id):
+        """Get a question in the database using id"""
+        sql = """
+        SELECT * FROM meetup_questions WHERE question_id = '{}';
+        """.format(question_id)
+        data = database_transactions(sql)
+        question = data.fetchone()
+        if not question:
+            return False
+        return question
