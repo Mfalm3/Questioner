@@ -85,6 +85,23 @@ class BaseTest(unittest.TestCase):
 
         return result
 
+    def create_meetup(self):
+        signin_result = self.login()
+        with self.client as c:
+            meetup_payload = {
+                "topic": "Bootcamp Andela 36",
+                "location": "PAC, Nairobi",
+                "happeningOn": "2019-2-2 2:00pm",
+                "tags": ["Bootcamp, Self-Learning"]
+            }
+            self.headers.update({"x-access-token": signin_result['token']})
+            response = c.post('/api/v2/meetups',
+                              json=meetup_payload,
+                              headers=self.headers)
+            result = json.loads(response.data.decode('utf-8'))
+
+            return result
+
     def tearDown(self):
         self.client = None
         tables_tear_down(self.app)
