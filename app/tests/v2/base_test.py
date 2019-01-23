@@ -42,6 +42,11 @@ class BaseTest(unittest.TestCase):
             "password": self.signup_payload0.get('password')
 
         }
+        self.signin_payload1 = {
+            "email": self.signup_payload1.get('email'),
+            "password": self.signup_payload1.get('password')
+
+        }
 
     def sign_up(self):
         with self.client as c:
@@ -51,11 +56,30 @@ class BaseTest(unittest.TestCase):
             result = json.loads(response.data.decode('utf-8'))
         return result
 
+    def sign_up_non_admin(self):
+        with self.client as c:
+            response = c.post(self.signup_url,
+                              json=self.signup_payload1,
+                              headers=self.headers)
+            result = json.loads(response.data.decode('utf-8'))
+        return result
+
+
     def login(self):
         self.sign_up()
         with self.client as c:
             response = c.post(self.signin_url,
                               json=self.signin_payload0,
+                              headers=self.headers)
+            result = json.loads(response.data.decode('utf-8'))
+
+        return result
+
+    def login_non_admin(self):
+        self.sign_up_non_admin()
+        with self.client as c:
+            response = c.post(self.signin_url,
+                              json=self.signin_payload1,
                               headers=self.headers)
             result = json.loads(response.data.decode('utf-8'))
 
