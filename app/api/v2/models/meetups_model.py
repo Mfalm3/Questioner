@@ -26,12 +26,13 @@ class MeetupsModel(BaseModel):
         sql = """
         INSERT INTO meetups (user_id, meetup_topic, meetup_location,
         meetup_date, meetup_tags, created_at)
-        VALUES ( '{}', '{}', '{}', '{}', '{}', '{}' );
+        VALUES ( '{}', '{}', '{}', '{}', '{}', '{}' ) returning meetup_id;
         """.format(self.user_id, self.topic, self.location, self.happening_on,
                    self.tags, self.created_at)
-        database_transactions(sql)
+        id = database_transactions(sql)
 
         data = {
+            "id": id.fetchone()['meetup_id'],
             "topic": self.topic,
             "location": self.location,
             "happening_on": self.happening_on,

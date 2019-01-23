@@ -90,7 +90,7 @@ def signup():
             "status": 201,
             "message": "User `{}` created "
             "successfully!".format(data['username']),
-            "data": [data]
+            "data": data
         }), 201
 
     except Exception as e:
