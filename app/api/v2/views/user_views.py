@@ -49,6 +49,16 @@ def signup():
         username = data.get("username")
         is_admin = data.get("isAdmin")
 
+        if is_admin in ['True', 'true', 'T', 't', 'yes', 'Yes', 1, 'y', 'Y']:
+            is_admin = True
+        elif is_admin in ['False', 'false', 'F', 'f', 'no', 'No', 0, 'n', 'N']:
+            is_admin = False
+        else:
+            return jsonify({
+                "status": 400,
+                "error": "Wrong parameter supplied for `isAdmin`"
+                }), 400
+
         if not valid_email(email):
             return jsonify({
                 "status": 400,
@@ -108,7 +118,7 @@ def login():
                 }), 400
         for key, value in data.items():
             if key in [field for field in required]:
-                if not value.replace(" ", "").strip():
+                if not value.replace(" ", ""):
                     return jsonify({
                         "status": 400,
                         "error": "{} is missing.".format(key)
@@ -123,6 +133,7 @@ def login():
                     data = {
                         "email": email,
                         "sub": email,
+                        "iat": datetime.datetime.now(),
                         "exp": datetime.datetime.now()
                                + datetime.timedelta(minutes=5)
                     }

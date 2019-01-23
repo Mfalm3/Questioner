@@ -1,5 +1,4 @@
 """Set up database connection"""
-import os
 import psycopg2 as pg2
 from psycopg2.extras import RealDictCursor
 from flask import current_app as app
@@ -30,13 +29,13 @@ def init_dbase(app):
 
 def database_transactions(query):
     conn = init_dbase(app)
+    cur = conn.cursor()
+
     if isinstance(query, list):
         for sql in query:
-            cur = conn.cursor()
             cur.execute(sql)
             conn.commit()
     elif isinstance(query, str):
-        cur = conn.cursor()
         cur.execute(query)
         conn.commit()
 
@@ -61,22 +60,28 @@ def tables_setup():
 
     table1 = "CREATE TABLE IF NOT EXISTS meetups " \
              "(meetup_id serial PRIMARY KEY, " \
+             "user_id INTEGER, " \
              "meetup_topic character varying(64) NOT NULL UNIQUE, " \
              "meetup_location character varying (64) NOT NULL, " \
-             "meetup_date DATE NOT NULL DEFAULT CURRENT_DATE, " \
-             "meetup_tags character varying(50) NOT NULL );"
+             "meetup_date TIMESTAMP NOT NULL DEFAULT CURRENT_DATE, " \
+             "meetup_tags character varying(50) NOT NULL, " \
+             "created_at character varying(50) NOT NULL, " \
+             "FOREIGN KEY (user_id) REFERENCES users(user_id)  " \
+             "ON DELETE CASCADE );"
 
     table2 = "CREATE TABLE IF NOT EXISTS meetup_questions " \
              "(question_id serial PRIMARY KEY NOT NULL, " \
-             "meetup_id INTEGER REFERENCES meetups(meetup_id), " \
+             "meetup_id INTEGER REFERENCES meetups(meetup_id)  " \
+             "ON DELETE CASCADE, " \
              "user_id INTEGER REFERENCES users(user_id), " \
              "question_title character varying(64) NOT NULL, " \
              "question_body character varying(256) NOT NULL, " \
-             "question_votes INTEGER NOT NULL); "
+             "question_votes INTEGER DEFAULT 0); "
 
     table3 = "CREATE TABLE IF NOT EXISTS meetup_questions_comments " \
              "(comment_id serial PRIMARY KEY, " \
-             "question_id INTEGER REFERENCES meetup_questions(question_id), " \
+             "question_id INTEGER REFERENCES meetup_questions(question_id)  " \
+             "ON DELETE CASCADE, " \
              "comment_body character varying(128));"
 
     table4 = "CREATE TABLE IF NOT EXISTS blacklisted_tokens " \
@@ -94,8 +99,8 @@ def tables_tear_down(app):
     meetups = " DROP TABLE IF EXISTS meetups CASCADE"
     questions = " DROP TABLE IF EXISTS meetup_questions CASCADE"
     comments = " DROP TABLE IF EXISTS meetup_questions_comments CASCADE"
-    comments = " DROP TABLE IF EXISTS blacklisted_token CASCADE"
-    tears.extend([users, meetups, questions, comments])
+    blacklisted_token = " DROP TABLE IF EXISTS blacklisted_tokens CASCADE"
+    tears.extend([users, meetups, questions, comments, blacklisted_token])
     conn = conn_link(app.config.get('DATABASE_URL'))
     cur = conn.cursor()
     try:
