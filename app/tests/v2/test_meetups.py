@@ -92,3 +92,11 @@ class TestMeetups(BaseTest):
         self.assertEqual(result['error'],
                          "topic field is missing")
         self.assertEqual(response.status_code, 400)
+
+    def test_get_upcoming_meetups(self):
+        with self.client as c:
+            response = c.get('/meetups/upcoming', headers=self.headers)
+            result = json.loads(response.data.decode('utf-8'))
+
+            self.assertEqual(result['data'], [])
+            self.assertIsInstance(result['data'], list)
