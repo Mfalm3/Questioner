@@ -95,7 +95,7 @@ class TestMeetups(BaseTest):
 
     def test_get_upcoming_meetups(self):
         with self.client as c:
-            response = c.get('/meetups/upcoming', headers=self.headers)
+            response = c.get('/api/v2/meetups/upcoming', headers=self.headers)
             result = json.loads(response.data.decode('utf-8'))
 
             self.assertEqual(result['data'], [])
