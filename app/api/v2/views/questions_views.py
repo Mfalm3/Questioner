@@ -60,3 +60,23 @@ def post_question(logged_user):
                          " is currently not available"
             }), 400
         raise e
+
+
+@V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>', methods=['GET'])
+def get_question(question_id):
+    try:
+        data = QuestionModel.get_question(question_id)
+        if data is not False:
+            return jsonify({
+                "status": 200,
+                "data": data
+            }), 200
+        return jsonify({
+            "status": 404,
+            "error": "Could't find a question record with that id"
+        }), 404
+    except Exception as e:
+        return jsonify({
+            "status": 400,
+            "error": str(e)
+        }), 400
