@@ -9,7 +9,23 @@ def valid_email(email):
         local_part = email.split('@')[0]
         if re.match("^\\w+(\\d?)(\\.+(\\w|\\d))?$", local_part):
             return True
-        return False
+    return False
+
+
+def is_empty(*args):
+    """Check for empty strings"""
+    items = [*args]
+    for item in items:
+        if isinstance(item, str):
+            check_string = item.replace(" ", "")
+            if check_string == "":
+                return True
+        if isinstance(item, list):
+            for each in item:
+                check_string = each.replace(" ", "")
+                if check_string == "":
+                    return True
+    return False
 
 
 def check_if_exists(table='', column='', data=''):
