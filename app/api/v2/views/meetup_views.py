@@ -68,3 +68,17 @@ def create_meetup(logged_user):
             "status": 400,
             "error": str(e)
         }), 400
+
+
+@V2_MEETUP_BLUEPRINT.route('/meetups/upcoming', methods=['GET'])
+def get_upcoming_meetup():
+    """Get all upcoming meetup records."""
+    try:
+        data = MeetupsModel.get_upcoming()
+        return jsonify({
+            "status": 200,
+            "data": data
+        }), 200
+
+    except Exception as e:
+        raise e

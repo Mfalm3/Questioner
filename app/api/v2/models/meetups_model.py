@@ -38,3 +38,14 @@ class MeetupsModel(BaseModel):
             "tags": self.tags
         }
         return data
+
+    @staticmethod
+    def get_upcoming():
+        """Get upcoming meetup records."""
+        sql = """
+        SELECT * FROM meetups WHERE meetup_date > now() + interval '1 day';
+        """
+        cur = database_transactions(sql)
+        data = cur.fetchall()
+
+        return data
