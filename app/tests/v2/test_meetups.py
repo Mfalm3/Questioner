@@ -68,3 +68,27 @@ class TestMeetups(BaseTest):
         self.assertEqual(result['error'],
                          "A meetup with that topic already exists!")
         self.assertEqual(response.status_code, 409)
+
+    def test_create_meetup_missing_field(self):
+        """Test for creating missing field"""
+        self.sign_up()
+        signin_result = self.login()
+        with self.client as c:
+            meetup_payload = {
+                "topic": "   ",
+                "location": "PAC, Nairobi",
+                "happeningOn": "2019-2-2 2:00pm",
+                "tags": ["Bootcamp, Self-Learning"]
+            }
+            self.headers.update({"x-access-token": signin_result['token']})
+            c.post('/api/v2/meetups',
+                   json=meetup_payload,
+                   headers=self.headers)
+            response = c.post('/api/v2/meetups',
+                              json=meetup_payload,
+                              headers=self.headers)
+            result = json.loads(response.data.decode('utf-8'))
+
+        self.assertEqual(result['error'],
+                         "topic field is missing")
+        self.assertEqual(response.status_code, 400)
