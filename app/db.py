@@ -71,18 +71,23 @@ def tables_setup():
 
     table2 = "CREATE TABLE IF NOT EXISTS meetup_questions " \
              "(question_id serial PRIMARY KEY NOT NULL, " \
-             "meetup_id INTEGER REFERENCES meetups(meetup_id)  " \
-             "ON DELETE CASCADE, " \
+             "meetup_id INTEGER , " \
              "user_id INTEGER REFERENCES users(user_id), " \
              "question_title character varying(64) NOT NULL, " \
              "question_body character varying(256) NOT NULL, " \
-             "question_votes INTEGER DEFAULT 0); "
+             "question_votes INTEGER DEFAULT 0, " \
+             "FOREIGN KEY (user_id) REFERENCES users(user_id)  " \
+             "ON DELETE CASCADE " \
+             "); "
 
     table3 = "CREATE TABLE IF NOT EXISTS meetup_questions_comments " \
              "(comment_id serial PRIMARY KEY, " \
-             "question_id INTEGER REFERENCES meetup_questions(question_id)  " \
-             "ON DELETE CASCADE, " \
-             "comment_body character varying(128));"
+             "question_id INTEGER, " \
+             "comment_body character varying(128)," \
+             "FOREIGN KEY (question_id) REFERENCES " \
+             "meetup_questions(question_id)  " \
+             "ON DELETE CASCADE " \
+             ");"
 
     table4 = "CREATE TABLE IF NOT EXISTS blacklisted_tokens " \
              "(token_id serial PRIMARY KEY, " \
