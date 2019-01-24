@@ -87,8 +87,15 @@ def tables_setup():
     table4 = "CREATE TABLE IF NOT EXISTS blacklisted_tokens " \
              "(token_id serial PRIMARY KEY, " \
              " blacklisted_token character varying(256) NOT NULL); "
+    table5 = "CREATE TABLE IF NOT EXISTS votes_table (id serial PRIMARY KEY, " \
+             "user_id INTEGER, " \
+             "question_id INTEGER, " \
+             "FOREIGN KEY (user_id) REFERENCES users(user_id) " \
+             "ON DELETE CASCADE, " \
+             "FOREIGN KEY (question_id) REFERENCES" \
+             " meetup_questions(question_id))"
 
-    tables.extend([table0, table1, table2, table3, table4])
+    tables.extend([table0, table1, table2, table3, table4, table5])
     return tables
 
 
@@ -99,8 +106,9 @@ def tables_tear_down(app):
     meetups = " DROP TABLE IF EXISTS meetups CASCADE"
     questions = " DROP TABLE IF EXISTS meetup_questions CASCADE"
     comments = " DROP TABLE IF EXISTS meetup_questions_comments CASCADE"
+    votes = "DROP TABLE IF EXISTS votes_table CASCADE"
     blacklisted_token = " DROP TABLE IF EXISTS blacklisted_tokens CASCADE"
-    tears.extend([users, meetups, questions, comments, blacklisted_token])
+    tears.extend([users, meetups, questions, comments,votes, blacklisted_token])
     conn = conn_link(app.config.get('DATABASE_URL'))
     cur = conn.cursor()
     try:
