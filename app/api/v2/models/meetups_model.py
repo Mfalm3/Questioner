@@ -41,6 +41,16 @@ class MeetupsModel(BaseModel):
         return data
 
     @staticmethod
+    def delete(meetup_id):
+        """Delete a meetup record"""
+        sql = """
+        DELETE FROM meetups WHERE meetup_id = {};
+        """.format(meetup_id)
+        meetup = MeetupsModel.get_meetup(meetup_id)
+        if meetup:
+            database_transactions(sql)
+
+    @staticmethod
     def get_upcoming():
         """Get upcoming meetup records."""
         sql = """
@@ -50,3 +60,15 @@ class MeetupsModel(BaseModel):
         data = cur.fetchall()
 
         return data
+
+    @staticmethod
+    def get_meetup(meetup_id):
+        """Get a meetup record in the database using its id"""
+        sql = """
+        SELECT * FROM meetups WHERE meetup_id = '{}';
+        """.format(meetup_id)
+        data = database_transactions(sql)
+        meetup = data.fetchone()
+        if not meetup:
+            return False
+        return meetup

@@ -100,3 +100,22 @@ class TestMeetups(BaseTest):
 
             self.assertEqual(result['data'], [])
             self.assertIsInstance(result['data'], list)
+
+    def test_delete_meetup(self):
+        # signup a test user
+        self.sign_up()
+
+        # log the user in
+        login_response = self.login()
+
+        # create a test meetup
+        result = self.create_meetup()
+
+        self.headers.update({"x-access-token":
+                             login_response['token']})
+        with self.client as c:
+            delete_response = c.delete('api/v2/meetups/1',
+                                       headers=self.headers)
+            result = json.loads(delete_response.data.decode('utf-8'))
+
+            self.assertEqual(result['message'], "Meetup deleted successfully!")
