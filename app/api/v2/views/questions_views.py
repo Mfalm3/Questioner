@@ -64,6 +64,7 @@ def post_question(logged_user):
 
 @V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>', methods=['GET'])
 def get_question(question_id):
+    """Get a specific question record"""
     try:
         data = QuestionModel.get_question(question_id)
         if data is not False:
@@ -80,3 +81,33 @@ def get_question(question_id):
             "status": 400,
             "error": str(e)
         }), 400
+
+
+@V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>/upvote',
+                             methods=['PATCH'])
+@requires_token
+def upvote_question(logged_user, question_id):
+    """Upvote a question view"""
+    try:
+        data = QuestionModel.get_question(question_id)
+        if not data:
+            return jsonify({
+                "status": 404,
+                "error": "The question of the id passed in does not exist"
+                }), 404
+        user_id = logged_user.get('user_id')
+        has_voted = QuestionModel.check_has_voted(user_id, question_id)
+        if has_voted:
+            return jsonify({
+                "status": 401,
+                "error": "You can only vote once!"
+                }), 401
+
+        QuestionModel.upvote(user_id, question_id)
+        return jsonify({
+            "status": 200,
+            "message": "Question upvoted successfully!"
+        }), 200
+
+    except Exception as e:
+        raise e
