@@ -82,3 +82,29 @@ def get_upcoming_meetup():
 
     except Exception as e:
         raise e
+
+
+@V2_MEETUP_BLUEPRINT.route('/meetups/<int:meetup_id>', methods=['DELETE'])
+@requires_token
+def delete_meetup(logged_user, meetup_id):
+    """Delete a meetup view"""
+    try:
+        if request.method == "DELETE":
+            user = UsersModel.get_user(logged_user['email'])
+            if user.get('isadmin') is False:
+                return jsonify({
+                    "status": 403,
+                    "error": "Action requires admin privilidges!"
+                }), 403
+
+            MeetupsModel.delete(meetup_id)
+            return jsonify({
+                "status": 200,
+                "message": "Meetup deleted successfully!"
+            })
+
+    except Exception as e:
+        return jsonify({
+            "status": 400,
+            "error": str(e)
+        })
