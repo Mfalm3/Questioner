@@ -116,15 +116,13 @@ class BaseTest(unittest.TestCase):
                     " Mine just ate my neighbors",
             "meetup": meetup_id
         }
-        print(signup_response['data']['id'])
-
         with self.client as c:
             question_post_response = c.post('api/v2/questions',
                                             json=question_payload,
                                             headers=self.headers)
             result = json.loads(question_post_response.data.decode('utf-8'))
 
-            return result
+            return [question_post_response, login_response['token']]
 
     def tearDown(self):
         self.client = None
