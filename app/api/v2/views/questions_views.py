@@ -103,10 +103,40 @@ def upvote_question(logged_user, question_id):
                 "error": "You can only vote once!"
                 }), 401
 
-        QuestionModel.upvote(user_id, question_id)
+        QuestionModel.vote("upvote", user_id, question_id)
         return jsonify({
             "status": 200,
             "message": "Question upvoted successfully!"
+        }), 200
+
+    except Exception as e:
+        raise e
+
+
+@V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>/downvote',
+                             methods=['PATCH'])
+@requires_token
+def downvote_question(logged_user, question_id):
+    """Downvote a question view"""
+    try:
+        data = QuestionModel.get_question(question_id)
+        if not data:
+            return jsonify({
+                "status": 404,
+                "error": "The question of the id passed in does not exist"
+                }), 404
+        user_id = logged_user.get('user_id')
+        has_voted = QuestionModel.check_has_voted(user_id, question_id)
+        if has_voted:
+            return jsonify({
+                "status": 401,
+                "error": "You can only vote once!"
+                }), 401
+
+        QuestionModel.vote("downvote", user_id, question_id)
+        return jsonify({
+            "status": 200,
+            "message": "Question downvoted successfully!"
         }), 200
 
     except Exception as e:
