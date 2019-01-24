@@ -119,3 +119,61 @@ class TestMeetups(BaseTest):
             result = json.loads(delete_response.data.decode('utf-8'))
 
             self.assertEqual(result['message'], "Meetup deleted successfully!")
+
+    def test_get_meetup(self):
+        # signup a test user
+        self.sign_up()
+
+        # log the user in
+        login_response = self.login()
+
+        # create a test meetup
+        result = self.create_meetup()
+
+        self.headers.update({"x-access-token":
+                             login_response['token']})
+        with self.client as c:
+            get_response = c.get('api/v2/meetups/1', headers=self.headers)
+            result = json.loads(get_response.data.decode('utf-8'))
+
+            self.assertEqual(get_response.status_code, 200)
+
+    def test_get_non_existent_meetup(self):
+        # signup a test user
+        self.sign_up()
+
+        # log the user in
+        login_response = self.login()
+
+        # create a test meetup
+        result = self.create_meetup()
+
+        self.headers.update({"x-access-token":
+                             login_response['token']})
+        with self.client as c:
+            get_response = c.get('api/v2/meetups/12', headers=self.headers)
+            result = json.loads(get_response.data.decode('utf-8'))
+
+            self.assertEqual(get_response.status_code, 404)
+            self.assertEqual(result['error'], "The meetup with the passed id"
+                             " doesn't exist")
+
+    def test_get_with_alpha(self):
+        # signup a test user
+        self.sign_up()
+
+        # log the user in
+        login_response = self.login()
+
+        # create a test meetup
+        result = self.create_meetup()
+
+        self.headers.update({"x-access-token":
+                             login_response['token']})
+        with self.client as c:
+            get_response = c.get('api/v2/meetups/k', headers=self.headers)
+            result = json.loads(get_response.data.decode('utf-8'))
+
+            self.assertEqual(get_response.status_code, 400)
+            self.assertEqual(result['error'], "The url requires only"
+                             " digits for the id!")

@@ -103,8 +103,31 @@ def delete_meetup(logged_user, meetup_id):
                 "message": "Meetup deleted successfully!"
             })
 
+
     except Exception as e:
         return jsonify({
             "status": 400,
             "error": str(e)
         })
+
+
+@V2_MEETUP_BLUEPRINT.route('/meetups/<meetup_id>', methods=['GET'])
+def get_specific_meetup(meetup_id):
+    """Get a specific meetup record"""
+    end_id = request.path.split('/')[-1]
+    if not end_id.isdigit():
+        return jsonify({
+            "status": 400,
+            "error": "The url requires only digits for the id!"
+        }), 400
+    meetup = MeetupsModel.get_meetup(meetup_id)
+    if meetup is not False:
+        return jsonify({
+            "status": 200,
+            "data": meetup
+        })
+    else:
+        return jsonify({
+            "status": 404,
+            "error": "The meetup with the passed id doesn't exist"
+        }), 404
