@@ -43,3 +43,26 @@ class QuestionModel(BaseModel):
         if not question:
             return False
         return question
+
+    @staticmethod
+    def upvote(user_id, question_id):
+        """upvote a question"""
+        upvote = """
+        UPDATE meetup_questions SET question_votes = question_votes+1
+        WHERE question_id = {};
+        """.format(question_id)
+        has_voted = """
+        INSERT INTO votes_table (user_id, question_id) VALUES({}, {})
+        """.format(user_id, question_id)
+        database_transactions([upvote, has_voted])
+
+    @staticmethod
+    def check_has_voted(user_id, question_id):
+        """Check if a user has already voted"""
+        sql = """
+        SELECT * FROM votes_table WHERE user_id = '{}' and question_id = '{}';
+        """.format(user_id, question_id)
+        data = database_transactions(sql)
+        if data.fetchone():
+            return True
+        return False
