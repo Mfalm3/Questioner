@@ -27,130 +27,130 @@ def signup():
         "username",
         "isAdmin"
         ]
+    my_true_booleans = ['True', 'true', 't', 'yes', 1, 'y', 'Y']
+    my_false_booleans = ['False', 'false','f', 'no', 0, 'n', 'N']
     try:
         data = request.get_json()
-        if data is None:
+        for field in required:
+            if field not in data.keys():
+                return jsonify({
+                    "status": 400,
+                    "error": "Please provide the following fields. " \
+                    "`{}`".format(field)
+                }), 400
+        for key, value in data.items():
+            if key in [field for field in required]:
+                if not value.replace(" ", "").strip():
+                    return jsonify({
+                        "status": 400,
+                        "error": "{} is missing.".format(key)
+                        }), 400
+
+        fname = data.get('firstname')
+        lname = data.get("lastname")
+        password = data.get("password")
+        other_name = data.get("othername") or ''
+        email = data.get("email")
+        phone = data.get("phoneNumber")
+        username = data.get("username")
+        is_admin = data.get("isAdmin")
+        if is_admin in my_true_booleans:
+            is_admin = True
+        elif is_admin in my_false_booleans:
+            is_admin = False
+        else:
             return jsonify({
-                "status": 400,
-                "error": "Please provide the required " \
-                "fields. {}".format([field for field in required])
-            }), 400
+            "status": 400,
+            "error": "Wrong parameter supplied for `isAdmin`"
+        }),400
+        new_user = user.user_obj(
+            fname=fname,
+            lname=lname,
+            password=password,
+            othername=other_name,
+            email=email,
+            phone_number=phone,
+            username=username,
+            isAdmin=is_admin)
+        return user.save(new_user)
     except Exception:
         return jsonify({
             "status": 400,
             "error": "Please provide the required " \
             "fields. {}".format([field for field in required])
         }), 400
-    fname = data.get('firstname')
-    lname = data.get("lastname")
-    password = data.get("password")
-    other_name = data.get("othername") or ''
-    email = data.get("email")
-    phone = data.get("phoneNumber")
-    username = data.get("username")
-    isAdmin = data.get("isAdmin")
-
-    if not fname:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("firstname")
-            }), 400
-    if not lname:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("lastname")
-        }), 400
-    if not password:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("password")
-        }), 400
-    if not email:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("email")
-            }), 400
-    if not phone:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("phoneNumber")
-            }), 400
-    if not username:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("username")
-        }), 400
-    if not isAdmin:
-        return jsonify({
-            "status": 400,
-            "error": "{} is missing.".format("isAdmin")
-            }), 400
-
-    new_user = user.user_obj(
-        fname=fname,
-        lname=lname,
-        password=password,
-        othername=other_name,
-        email=email,
-        phone_number=phone,
-        username=username,
-        isAdmin=isAdmin)
-    return user.save(new_user)
 
 
 @v1_user_blueprint.route('/login', methods=['POST'])
 def login():
     """Log in route."""
-    data = request.json
-    email = data.get('email')
-    password = data.get('password')
+    required = ['email','password']
+    try:
+        data = request.json
+        email = data.get('email')
+        password = data.get('password')
 
-    if is_empty(email):
-        return jsonify({
-            "status": 400,
-            "error": "email is missing."
-        }), 400
-    if is_empty(password):
-        return jsonify({
-            "status": 400,
-            "error": "password is missing."
-        }), 400
-
-    if valid_email(email):
-        if email_exists(email, user_db):
-            cur_user = user.get_user(email)
-            if cur_user and \
-                    check_password_hash(
-                            cur_user.get('password'), password):
-                data = {
-                    "email": email,
-                    "sub": email,
-                    "exp": datetime.datetime.now()
-                           + datetime.timedelta(minutes=5)
-                }
-                token = jwt.encode(data, enc_key, algorithm='HS256')
-
-                if token:
+        for field in required:
+            if field not in data.keys():
+                return jsonify({
+                    "status": 400,
+                    "error": "Please provide the following fields. " \
+                    "`{}`".format(field)
+                }), 400
+        for key, value in data.items():
+            if key in [field for field in required]:
+                if not value.replace(" ", "").strip():
                     return jsonify({
-                        "status": 200,
-                        "message": "Logged in successfully!",
-                        "token": token.decode('utf-8')
-                        }), 200
-                else:
-                    return jsonify({
-                        "status": 401,
-                        "error": "Could not verify token. \
-                        Please sign in again!",
-                        "token": token.decode('utf-8')
-                        }), 401
+                        "status": 400,
+                        "error": "{} is missing.".format(key)
+                        }), 400
 
+        if valid_email(email):
+            if email_exists(email, user_db):
+                cur_user = user.get_user(email)
+                if cur_user and \
+                        check_password_hash(
+                                cur_user.get('password'), password):
+                    data = {
+                        "email": email,
+                        "sub": email,
+                        "exp": datetime.datetime.now()
+                               + datetime.timedelta(minutes=5)
+                    }
+                    token = jwt.encode(data, enc_key, algorithm='HS256')
+
+                    if token:
+                        return jsonify({
+                            "status": 200,
+                            "message": "Logged in successfully!",
+                            "token": token.decode('utf-8')
+                            }), 200
+                    else:
+                        return jsonify({
+                            "status": 401,
+                            "error": "Could not verify token. \
+                            Please sign in again!",
+                            "token": token.decode('utf-8')
+                            }), 401
+                return jsonify({
+                    "status": 400,
+                    "error": "Email/Password is invalid. Please check your credentials"
+                    }), 400
+
+            else:
+                return jsonify({
+                    "status": 400,
+                    "error": "No user found with the given credentials"
+                    }), 400
         else:
             return jsonify({
                 "status": 400,
-                "error": "No user found with the given credentials"
-                }), 400
-    else:
+                "error": "Email invalid"
+            }), 400
+
+    except Exception:
         return jsonify({
             "status": 400,
-            "error": "Email invalid"
-        })
+            "error": "Please provide the required " \
+            "fields. {}".format([field for field in required])
+        }), 400

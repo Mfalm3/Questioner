@@ -80,10 +80,21 @@ class UsersModel(BaseModel):
                         "error": "Username Already Exists!"}), 409
                 else:
                     self.db.append(user)
+                    data = {
+                        "email": user['email'],
+                        "firstname": user['firstname'],
+                        "id": user['id'],
+                        "isAdmin": user['isAdmin'],
+                        "lastname": user['lastname'],
+                        "othername": user['othername'],
+                        "phoneNumber": user['phoneNumber'],
+                        "registered": user['registered'],
+                        "username": user['username']
+                    }
                     return jsonify({
                         "status": 201,
                         "message": "User Created Successfully!",
-                        "user": user
+                        "user": data
                         }), 201
         else:
             return jsonify({

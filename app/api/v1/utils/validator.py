@@ -4,11 +4,11 @@ import re
 
 def valid_email(email):
     """Check if an email matches a regex pattern."""
-    if(re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)", email)):
+    if re.match("(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)", email):
         local_part = email.split('@')[0]
-        if re.match("^\\w+(\\d?)(\\.+(\\w|\\d))?$", local_part):
+        if re.match("^(\\w+(\\.+[a-zA-Z0-9]{0,10})?)$", local_part):
             return True
-    return False
+        return False
 
 
 def email_exists(email, db):
@@ -23,17 +23,23 @@ def username_exists(username, db):
     for rows in db:
         if username in rows.values():
             return True
-        return False
+    return False
 
+
+def meetup_exists(topic, meetup_db):
+    for rows in meetup_db:
+        if rows["topic"] == topic:
+            return True
+    return False
 
 def is_empty(*args):
     """Check for empty strings"""
     items = [*args]
     for item in items:
-        check_string = item.replace(" ", "").strip()
+        check_string = item.replace(" ", "")
         if check_string == "":
             return True
-        return False
+    return False
 
 
 def no_numbers(string):
@@ -42,7 +48,7 @@ def no_numbers(string):
         check_string = string.strip().replace(' ', '')
         if check_string.isalpha():
             return True
-        return False
+    return False
 
 
 def required_length(string, field='', length=8):
@@ -53,4 +59,4 @@ def required_length(string, field='', length=8):
             length_error = "The {} field requires a minimum number of " \
              "{} characters".format(field, length)
             return length_error
-        return True
+    return True

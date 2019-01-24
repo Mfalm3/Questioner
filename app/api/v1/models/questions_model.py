@@ -32,9 +32,11 @@ class QuestionModel(BaseModel):
         """Store a question method."""
         db = self.db
         db.append(question)
+        data = question
         return jsonify({
             "status": 201,
-            "message": "Question posted successfully!"
+            "message": "Question posted successfully!",
+            "data": data
         })
 
     def get_question(self, question_id):
@@ -42,14 +44,22 @@ class QuestionModel(BaseModel):
         query = self.db[question_id - 1]
         return query
 
-    def upvote(self, question):
+    def upvote(self, user, question):
         """Upvote a question method."""
         query = question
-        query['votes'] += 1
+        if query.get('user') is None or query['user'].get('hasvoted') == 1 and query['user'].get('id') != user['email']:
+            query['votes'] += 1
+            query.update({'user':{'id':user['email'], 'hasvoted': 1}})
+        elif query['user'].get('hasvoted') == 1 and query['user'].get('id') == user['email']:
+            return False
         return query
 
-    def downvote(self, question):
+    def downvote(self, user, question):
         """Downvote a question method."""
         query = question
-        query['votes'] -= 1
+        if query.get('user') is None or query['user'].get('hasvoted') == 1 and query['user'].get('id') != user['email']:
+            query['votes'] -= 1
+            query.update({'user':{'id':user['email'], 'hasvoted': 1}})
+        elif query['user'].get('hasvoted') == 1:
+            return False
         return query
