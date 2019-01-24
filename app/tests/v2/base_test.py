@@ -102,6 +102,30 @@ class BaseTest(unittest.TestCase):
 
             return result
 
+    def post_question(self):
+        signup_response = self.sign_up()
+        login_response = self.login()
+        result = self.create_meetup()
+        meetup_id = result['data']['id']
+
+        self.headers.update({"x-access-token":
+                             login_response['token']})
+        question_payload = {
+            "title": "How to train your dragon?",
+            "body": "How does one get to tame their dragons?"
+                    " Mine just ate my neighbors",
+            "meetup": meetup_id
+        }
+        print(signup_response['data']['id'])
+
+        with self.client as c:
+            question_post_response = c.post('api/v2/questions',
+                                            json=question_payload,
+                                            headers=self.headers)
+            result = json.loads(question_post_response.data.decode('utf-8'))
+
+            return result
+
     def tearDown(self):
         self.client = None
         tables_tear_down(self.app)
