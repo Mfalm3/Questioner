@@ -45,16 +45,27 @@ class QuestionModel(BaseModel):
         return question
 
     @staticmethod
-    def upvote(user_id, question_id):
-        """upvote a question"""
-        upvote = """
-        UPDATE meetup_questions SET question_votes = question_votes+1
-        WHERE question_id = {};
-        """.format(question_id)
-        has_voted = """
-        INSERT INTO votes_table (user_id, question_id) VALUES({}, {})
-        """.format(user_id, question_id)
-        database_transactions([upvote, has_voted])
+    def vote(vote_type, user_id, question_id):
+        """upvote/downvote a question"""
+
+        if vote_type == "upvote":
+            upvote = """
+            UPDATE meetup_questions SET question_votes = question_votes+1
+            WHERE question_id = {};
+            """.format(question_id)
+            has_voted = """
+            INSERT INTO votes_table (user_id, question_id) VALUES({}, {})
+            """.format(user_id, question_id)
+            database_transactions([upvote, has_voted])
+        elif vote_type == "downvote":
+            downvote = """
+            UPDATE meetup_questions SET question_votes = question_votes-1
+            WHERE question_id = {};
+            """.format(question_id)
+            has_voted = """
+            INSERT INTO votes_table (user_id, question_id) VALUES({}, {})
+            """.format(user_id, question_id)
+            database_transactions([downvote, has_voted])
 
     @staticmethod
     def check_has_voted(user_id, question_id):
