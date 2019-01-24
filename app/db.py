@@ -83,7 +83,10 @@ def tables_setup():
     table3 = "CREATE TABLE IF NOT EXISTS meetup_questions_comments " \
              "(comment_id serial PRIMARY KEY, " \
              "question_id INTEGER, " \
+             "user_id INTEGER, " \
              "comment_body character varying(128)," \
+             "question_title character varying(128)," \
+             "question_body character varying(128)," \
              "FOREIGN KEY (question_id) REFERENCES " \
              "meetup_questions(question_id)  " \
              "ON DELETE CASCADE " \
