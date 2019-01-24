@@ -64,7 +64,6 @@ class BaseTest(unittest.TestCase):
             result = json.loads(response.data.decode('utf-8'))
         return result
 
-
     def login(self):
         self.sign_up()
         with self.client as c:
@@ -103,7 +102,7 @@ class BaseTest(unittest.TestCase):
             return result
 
     def post_question(self):
-        signup_response = self.sign_up()
+        self.sign_up()
         login_response = self.login()
         result = self.create_meetup()
         meetup_id = result['data']['id']
