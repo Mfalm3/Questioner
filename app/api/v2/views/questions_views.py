@@ -1,6 +1,7 @@
 # Question Views v2.
 from flask import Blueprint, request, jsonify
 from app.api.v2.models.questions_model import QuestionModel
+from app.api.v2.models.comments_model import CommentsModel
 from app.api.v2.utils.utils import requires_token
 from app.api.v2.utils.validator import is_empty, check_if_exists
 
@@ -139,5 +140,48 @@ def downvote_question(logged_user, question_id):
             "message": "Question downvoted successfully!"
         }), 200
 
+    except Exception as e:
+        raise e
+
+
+@V2_QUESTION_BLUEPRINT.route('/comments', methods=['POST'])
+@requires_token
+def create_comment(logged_user):
+    try:
+        data = request.json
+        for key, value in data.items():
+            if key not in ['title', 'body', 'comment', 'question']:
+                return jsonify({
+                    "status": 400,
+                    "error": "{} field is missing".format(key)
+                }), 400
+            if is_empty(value):
+                return jsonify({
+                    "status": 400,
+                    "error": "{} field is empty".format(key)
+                }), 400
+        question_id = data.get('question')
+        title = data.get('title')
+        body = data.get('body')
+        comment = data.get('comment')
+        user_id = logged_user.get('user_id')
+
+        if not check_if_exists('meetup_questions', 'question_id', question_id):
+            return jsonify({
+                "status": 404,
+                "error": "Could not get the question for the id passed in"
+                         " in that meetup!"
+            }), 404
+        new_comment = CommentsModel(question=question_id,
+                                    title=title,
+                                    body=body,
+                                    comment=comment,
+                                    user=user_id)
+        response = new_comment.save()
+        return jsonify({
+            "status": 201,
+            "message": "Comment added successfully",
+            "data": [response]
+        })
     except Exception as e:
         raise e
