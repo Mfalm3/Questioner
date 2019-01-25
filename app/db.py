@@ -2,6 +2,7 @@
 import psycopg2 as pg2
 from psycopg2.extras import RealDictCursor
 from flask import current_app as app
+from werkzeug.security import generate_password_hash
 
 
 def conn_link(link):
@@ -23,7 +24,9 @@ def init_dbase(app):
 
     for table_query in db_queries:
         cur.execute(table_query)
+    cur.execute(admin_setup())
     conn.commit()
+
     return conn
 
 
@@ -55,7 +58,7 @@ def tables_setup():
              "password character varying(256) NOT NULL, " \
              "phoneNumber character varying(16) NOT NULL, " \
              "username character varying(16) NOT NULL UNIQUE, " \
-             "isAdmin boolean, " \
+             "isAdmin boolean DEFAULT FALSE, " \
              "registered TIMESTAMP);"""
 
     table1 = "CREATE TABLE IF NOT EXISTS meetups " \
@@ -106,6 +109,14 @@ def tables_setup():
     tables.extend([table0, table1, table2, table3, table4, table5])
     return tables
 
+def admin_setup():
+    """Create an admin user"""
+    setup_data = """INSERT INTO users (firstname, lastname, othername, email,
+    password, phoneNumber, username, isAdmin, registered) VALUES ('Captain', 'Hook', 'TH',
+    'admin@email.com', '{}', '254722222222', 'capitan', True, '{}'');
+    """.format(generate_password_hash('Myp4$$wad!'))
+    return setup_data
+
 
 def tables_tear_down(app):
     """Initialize test teardowns"""
@@ -116,7 +127,7 @@ def tables_tear_down(app):
     comments = " DROP TABLE IF EXISTS meetup_questions_comments CASCADE"
     votes = "DROP TABLE IF EXISTS votes_table CASCADE"
     blacklisted_token = " DROP TABLE IF EXISTS blacklisted_tokens CASCADE"
-    tears.extend([users, meetups, questions, comments,votes, blacklisted_token])
+    tears.extend([users, meetups, questions, comments, votes, blacklisted_token])
     conn = conn_link(app.config.get('DATABASE_URL'))
     cur = conn.cursor()
     try:
