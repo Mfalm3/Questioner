@@ -4,7 +4,7 @@ import jwt
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
 from app.api.v2.utils.validator import (valid_email, check_if_exists,
-validate_password, contains_whitespace)
+validate_password, contains_whitespace, is_string)
 from app.api.v2.models.users_model import UsersModel
 from instance.config import key as enc_key
 
@@ -63,7 +63,7 @@ def signup():
             return jsonify({
                 "status": 400,
                 "error": "The password doesn't match our standards!"
-            })
+            }), 400
         if check_if_exists('users', 'username', username):
             return jsonify({
                 'status': 409,
@@ -75,6 +75,21 @@ def signup():
                 "error": "That email already exists."
                 "Perhaps you want to login?"
             }), 409
+        if not is_string(username):
+            return jsonify({
+                "status": 400,
+                "error": "The username must be a string"
+            })
+        if not is_string(first_name):
+            return jsonify({
+                "status": 400,
+                "error": "The firstname must be a string"
+            })
+        if not is_string(last_name):
+            return jsonify({
+                "status": 400,
+                "error": "The lastname must be a string"
+            })
         new_user = UsersModel(
             fname=first_name,
             lname=last_name,
