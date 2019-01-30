@@ -63,9 +63,15 @@ def post_question(logged_user):
         raise e
 
 
-@V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>', methods=['GET'])
+@V2_QUESTION_BLUEPRINT.route('/questions/<question_id>', methods=['GET'])
 def get_question(question_id):
     """Get a specific question record"""
+    end_id = request.path.split('/')[-1]
+    if not end_id.isdigit():
+        return jsonify({
+            "status": 400,
+            "error": "The url requires only digits for the id!"
+        }), 400
     try:
         data = QuestionModel.get_question(question_id)
         if data is not False:
@@ -84,11 +90,17 @@ def get_question(question_id):
         }), 400
 
 
-@V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>/upvote',
+@V2_QUESTION_BLUEPRINT.route('/questions/<question_id>/upvote',
                              methods=['PATCH'])
 @requires_token
 def upvote_question(logged_user, question_id):
     """Upvote a question view"""
+    end_id = request.path.split('/')[-2]
+    if not end_id.isdigit():
+        return jsonify({
+            "status": 400,
+            "error": "The url requires only digits for the id!"
+        }), 400
     try:
         data = QuestionModel.get_question(question_id)
         if not data:
@@ -97,7 +109,8 @@ def upvote_question(logged_user, question_id):
                 "error": "The question of the id passed in does not exist"
                 }), 404
         user_id = logged_user.get('user_id')
-        has_voted = QuestionModel.check_has_voted(user_id, question_id)
+        has_voted = QuestionModel.check_has_voted(user_id, question_id,
+                                                  "upvote")
         if has_voted:
             return jsonify({
                 "status": 401,
@@ -114,11 +127,17 @@ def upvote_question(logged_user, question_id):
         raise e
 
 
-@V2_QUESTION_BLUEPRINT.route('/questions/<int:question_id>/downvote',
+@V2_QUESTION_BLUEPRINT.route('/questions/<question_id>/downvote',
                              methods=['PATCH'])
 @requires_token
 def downvote_question(logged_user, question_id):
     """Downvote a question view"""
+    end_id = request.path.split('/')[-2]
+    if not end_id.isdigit():
+        return jsonify({
+            "status": 400,
+            "error": "The url requires only digits for the id!"
+        }), 400
     try:
         data = QuestionModel.get_question(question_id)
         if not data:
@@ -127,7 +146,8 @@ def downvote_question(logged_user, question_id):
                 "error": "The question of the id passed in does not exist"
                 }), 404
         user_id = logged_user.get('user_id')
-        has_voted = QuestionModel.check_has_voted(user_id, question_id)
+        has_voted = QuestionModel.check_has_voted(user_id, question_id,
+                                                  "downvote")
         if has_voted:
             return jsonify({
                 "status": 401,
