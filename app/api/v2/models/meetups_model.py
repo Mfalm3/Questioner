@@ -54,7 +54,19 @@ class MeetupsModel(BaseModel):
     def get_upcoming():
         """Get upcoming meetup records."""
         sql = """
-        SELECT * FROM meetups WHERE meetup_date > now() + interval '1 day';
+       SELECT row_to_json(meets) as meetup
+            FROM (SELECT *,
+                 (SELECT coalesce(json_agg(qst), '[]'::json)
+                  FROM(SELECT *,
+                              (SELECT coalesce(json_agg(qstc), '[]'::json)
+                                  FROM(SELECT  * FROM meetup_questions_comments mqc
+                               WHERE mq.question_id = mqc.question_id
+                               )qstc) AS comments
+                  FROM meetup_questions mq WHERE m.meetup_id = mq.meetup_id
+                      )qst)
+                 AS questions
+              FROM meetups m)AS meets
+              WHERE meetup_date > now() + interval '1 day';
         """
         cur = database_transactions(sql)
         data = cur.fetchall()
@@ -65,7 +77,19 @@ class MeetupsModel(BaseModel):
     def get_meetup(meetup_id):
         """Get a meetup record in the database using its id"""
         sql = """
-        SELECT * FROM meetups WHERE meetup_id = '{}';
+        SELECT row_to_json(meets) as meetup
+            FROM (SELECT *,
+                 (SELECT coalesce(json_agg(qst), '[]'::json)
+                  FROM(SELECT *,
+                              (SELECT coalesce(json_agg(qstc), '[]'::json)
+                                  FROM(SELECT  * FROM meetup_questions_comments mqc
+                               WHERE mq.question_id = mqc.question_id
+                               )qstc) AS comments
+                  FROM meetup_questions mq WHERE m.meetup_id = mq.meetup_id
+                      )qst)
+                 AS questions
+              FROM meetups m)AS meets
+        WHERE meetup_id = {};
         """.format(meetup_id)
         data = database_transactions(sql)
         meetup = data.fetchone()
