@@ -3,7 +3,8 @@ import datetime
 import jwt
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
-from app.api.v2.utils.validator import valid_email, check_if_exists
+from app.api.v2.utils.validator import (valid_email, check_if_exists,
+validate_password, contains_whitespace)
 from app.api.v2.models.users_model import UsersModel
 from instance.config import key as enc_key
 
@@ -20,8 +21,7 @@ def signup():
         "password",
         "email",
         "phoneNumber",
-        "username",
-        "isAdmin"
+        "username"
     ]
     try:
         data = request.get_json()
@@ -34,7 +34,13 @@ def signup():
                 })
         for key, value in data.items():
             if key in [field for field in required]:
-                if not value.replace(" ", "").strip():
+                if contains_whitespace(value):
+                    return jsonify({
+                        "status": 400,
+                        "error": "You cannot have whitepaces in"
+                                 " {} field".format(key)
+                    })
+                if not value.replace(" ", ""):
                     return jsonify({
                         "status": 400,
                         "error": "{} is missing.".format(key)
@@ -47,24 +53,17 @@ def signup():
         email = data.get("email")
         phone = data.get("phoneNumber")
         username = data.get("username")
-        is_admin = data.get("isAdmin")
-
-        if is_admin in ['True', 'true', 'T', 't', 'yes', 'Yes', 1, 'y', 'Y']:
-            is_admin = True
-        elif is_admin in ['False', 'false', 'F', 'f', 'no', 'No', 0, 'n', 'N']:
-            is_admin = False
-        else:
-            return jsonify({
-                "status": 400,
-                "error": "Wrong parameter supplied for `isAdmin`"
-                }), 400
 
         if not valid_email(email):
             return jsonify({
                 "status": 400,
                 "error": "The email provided is not in the right format"
             }), 400
-
+        if not validate_password(password):
+            return jsonify({
+                "status": 400,
+                "error": "The password doesn't match our standards!"
+            })
         if check_if_exists('users', 'username', username):
             return jsonify({
                 'status': 409,
@@ -83,8 +82,7 @@ def signup():
             other_name=other_name,
             email=email,
             phone_number=phone,
-            username=username,
-            is_admin=is_admin)
+            username=username)
         data = new_user.save()
         return jsonify({
             "status": 201,
@@ -154,7 +152,7 @@ def login():
                             }), 401
                 return jsonify({
                     "status": 400,
-                    "error": "Email/Password is invalid. Please check your"
+                    "error": "Password is invalid. Please check your"
                     " credentials"
                     }), 400
 
