@@ -84,24 +84,29 @@ def get_upcoming_meetup():
         raise e
 
 
-@V2_MEETUP_BLUEPRINT.route('/meetups/<int:meetup_id>', methods=['DELETE'])
+@V2_MEETUP_BLUEPRINT.route('/meetups/<meetup_id>', methods=['DELETE'])
 @requires_token
 def delete_meetup(logged_user, meetup_id):
     """Delete a meetup view"""
+    end_id = request.path.split('/')[-1]
+    if not end_id.isdigit():
+        return jsonify({
+            "status": 400,
+            "error": "The url requires only digits for the id!"
+        }), 400
     try:
-        if request.method == "DELETE":
-            user = UsersModel.get_user(logged_user['email'])
-            if user.get('isadmin') is False:
-                return jsonify({
-                    "status": 403,
-                    "error": "Action requires admin privilidges!"
-                }), 403
-
-            MeetupsModel.delete(meetup_id)
+        user = UsersModel.get_user(logged_user['email'])
+        if user.get('isadmin') is False:
             return jsonify({
-                "status": 200,
-                "message": "Meetup deleted successfully!"
-            })
+                "status": 403,
+                "error": "Action requires admin privilidges!"
+            }), 403
+
+        MeetupsModel.delete(meetup_id)
+        return jsonify({
+            "status": 200,
+            "message": "Meetup deleted successfully!"
+        })
 
 
     except Exception as e:
@@ -125,9 +130,8 @@ def get_specific_meetup(meetup_id):
         return jsonify({
             "status": 200,
             "data": meetup
-        })
-    else:
-        return jsonify({
+            })
+    return jsonify({
             "status": 404,
             "error": "The meetup with the passed id doesn't exist"
         }), 404
