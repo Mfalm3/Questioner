@@ -17,7 +17,7 @@ class BaseTest(unittest.TestCase):
         self.signup_payload0 = {
             "firstname": "J",
             "lastname": "Waithaka",
-            "password": "password",
+            "password": "pas$5sworD",
             "othername": "JW",
             "email": "tes.t@gmail.com",
             "phoneNumber": "254722222222",
@@ -28,7 +28,7 @@ class BaseTest(unittest.TestCase):
         self.signup_payload1 = {
             "firstname": "Jose",
             "lastname": "Waithaka",
-            "password": "password",
+            "password": "pas$5worD",
             "othername": "JW",
             "email": "joseph@gmail.com",
             "phoneNumber": "254722222222",
