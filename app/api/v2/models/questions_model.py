@@ -19,9 +19,9 @@ class QuestionModel(BaseModel):
         """Save a new question to the database"""
         sql = """
         INSERT INTO meetup_questions (meetup_id,
-        user_id, question_title, question_body, question_votes)
-        VALUES ('{}','{}','{}','{}','{}')
-        """.format(self.meetup, self.user, self.title, self.body, 0)
+        user_id, question_title, question_body)
+        VALUES ('{}','{}','{}','{}')
+        """.format(self.meetup, self.user, self.title, self.body)
 
         database_transactions(sql)
         data = {
