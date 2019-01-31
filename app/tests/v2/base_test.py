@@ -22,8 +22,6 @@ class BaseTest(unittest.TestCase):
             "email": "tes.t@gmail.com",
             "phoneNumber": "254722222222",
             "username": "waithaka",
-            "registered": "now",
-            "isAdmin": "True"
         }
         self.signup_payload1 = {
             "firstname": "Jose",
@@ -32,14 +30,12 @@ class BaseTest(unittest.TestCase):
             "othername": "JW",
             "email": "joseph@gmail.com",
             "phoneNumber": "254722222222",
-            "username": "Joseph",
-            "registered": "now",
-            "isAdmin": "False"
+            "username": "Joseph"
         }
 
         self.signin_payload0 = {
-            "email": self.signup_payload0.get('email'),
-            "password": self.signup_payload0.get('password')
+            "email": "admin@email.com",
+            "password": "Myp4$$wad!"
 
         }
         self.signin_payload1 = {
@@ -85,12 +81,13 @@ class BaseTest(unittest.TestCase):
         return result
 
     def create_meetup(self):
+        self.sign_up()
         signin_result = self.login()
         with self.client as c:
             meetup_payload = {
                 "topic": "Bootcamp Andela 36",
                 "location": "PAC, Nairobi",
-                "happeningOn": "2019-2-2 2:00pm",
+                "happeningOn": "2019-02-02 2:00pm",
                 "tags": ["Bootcamp, Self-Learning"]
             }
             self.headers.update({"x-access-token": signin_result['token']})
@@ -106,6 +103,7 @@ class BaseTest(unittest.TestCase):
         login_response = self.login()
         result = self.create_meetup()
         meetup_id = result['data']['id']
+        print(result)
 
         self.headers.update({"x-access-token":
                              login_response['token']})
