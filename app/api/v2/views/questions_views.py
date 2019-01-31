@@ -30,12 +30,6 @@ def post_question(logged_user):
         title = data.get('title')
         body = data.get('body')
 
-        if check_if_exists('meetup_questions', 'question_title', title):
-            return jsonify({
-                "status": 409,
-                "error": "A Question with that title had already been asked"
-                         " in that meetup!"
-            }), 409
         user_id = logged_user.get('user_id')
         new_question = QuestionModel(title=title,
                                      body=body,
