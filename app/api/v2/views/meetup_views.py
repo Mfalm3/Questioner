@@ -1,10 +1,10 @@
 # Meetups Views v2.
+import datetime
 from flask import Blueprint, jsonify, request
 from app.api.v2.models.meetups_model import MeetupsModel
 from app.api.v2.models.users_model import UsersModel
 from app.api.v2.utils.validator import is_empty
 from app.api.v2.utils.utils import requires_token
-from app.api.v2.utils.validator import check_if_exists
 
 V2_MEETUP_BLUEPRINT = Blueprint('v2_meetup_blueprint',
                                 __name__, url_prefix='/api/v2')
@@ -32,6 +32,24 @@ def create_meetup(logged_user):
         topic = data.get('topic')
         location = data.get('location')
         happening_on = data.get('happeningOn')
+        try:
+            check_date = happening_on.split('T')[0]
+            now = datetime.datetime.now()
+            check_date = datetime.datetime.strptime(check_date, '%Y-%m-%d')
+            if now > check_date:
+                return jsonify({
+                    "status": 400,
+                    "error": "You can only post a meetup with"
+                             " a date in the future!"
+                })
+
+        except ValueError:
+            return jsonify({
+                "status": 400,
+                "error": "Incorrect date format, should be YYYY-MM-DD"
+                         " and correct values passed for month and date!"
+            })
+
         tags = data.get('tags')
         if isinstance(tags, list):
             tags = ','.join([item for item in tags])
@@ -44,11 +62,7 @@ def create_meetup(logged_user):
                     "status": 400,
                     "error": "{} field is missing".format(key)
                 }), 400
-        if check_if_exists('meetups', 'meetup_topic', topic):
-            return jsonify({
-                "status": 409,
-                "error": "A meetup with that topic already exists!"
-            }), 409
+
         user_id = logged_user.get('user_id')
         new_meetup = MeetupsModel(topic=topic,
                                   location=location,
