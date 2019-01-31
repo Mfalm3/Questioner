@@ -80,7 +80,6 @@ def tables_setup():
              "user_id INTEGER, " \
              "question_title character varying(64) NOT NULL, " \
              "question_body character varying(256) NOT NULL, " \
-             "question_votes INTEGER DEFAULT 0, " \
              "FOREIGN KEY (meetup_id) REFERENCES meetups(meetup_id)  " \
              "ON DELETE CASCADE ON UPDATE CASCADE," \
              "FOREIGN KEY (user_id) REFERENCES users(user_id)  " \
