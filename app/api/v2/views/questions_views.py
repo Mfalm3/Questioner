@@ -108,7 +108,7 @@ def upvote_question(logged_user, question_id):
         if has_voted:
             return jsonify({
                 "status": 401,
-                "error": "You can only vote once!"
+                "error": "You can only upvote once!"
                 }), 401
 
         QuestionModel.vote("upvote", user_id, question_id)
@@ -145,7 +145,7 @@ def downvote_question(logged_user, question_id):
         if has_voted:
             return jsonify({
                 "status": 401,
-                "error": "You can only vote once!"
+                "error": "You can only downvote once!"
                 }), 401
 
         QuestionModel.vote("downvote", user_id, question_id)
