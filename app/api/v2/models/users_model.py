@@ -9,7 +9,7 @@ class UsersModel(BaseModel):
     """Model class for users."""
 
     def __init__(self, fname, lname, email, password, phone_number, username,
-                 is_admin, other_name=''):
+                 other_name=''):
         """Initialize the users model."""
         super(UsersModel, self).__init__()
         self.fname = fname
@@ -18,7 +18,6 @@ class UsersModel(BaseModel):
         self.password = self.hashed_pw(password)
         self.phone_number = phone_number
         self.username = username
-        self.is_admin = is_admin
         self.other_name = other_name
 
     def hashed_pw(self, password):
@@ -29,11 +28,11 @@ class UsersModel(BaseModel):
     def save(self):
         store = """
         INSERT INTO users(firstname, lastname, othername, email,
-        password, phoneNumber, username, isAdmin, registered ) VALUES (
-        '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
+        password, phoneNumber, username, registered ) VALUES (
+        '{}', '{}', '{}', '{}', '{}', '{}', '{}', '{}')
         returning user_id""".format(
             self.fname, self.lname, self.other_name, self.email,
-            self.password, self.phone_number, self.username, self.is_admin,
+            self.password, self.phone_number, self.username,
             datetime.datetime.now()
         )
 
@@ -46,7 +45,6 @@ class UsersModel(BaseModel):
             "email": self.email,
             "phoneNumber": self.phone_number,
             "username": self.username,
-            "isAdmin": self.is_admin,
             "registered_at": datetime.datetime.now()
         }
 

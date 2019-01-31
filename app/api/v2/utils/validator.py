@@ -39,3 +39,45 @@ def check_if_exists(table='', column='', data=''):
     if exists:
         return True
     return False
+
+
+def validate_password(pw):
+    """Password validator function"""
+    state = True
+    while state:
+        if len(pw) < 6 or len(pw) > 12:
+            break
+        elif not re.search('[a-z]', pw):
+            break
+        elif not re.search('[A-Z]', pw):
+            break
+        elif not re.search('[0-9]', pw):
+            break
+        elif not re.search('[$#@]', pw):
+            break
+        elif re.search('[\\s]', pw):
+            break
+        else:
+            validation = True
+
+            state = False
+            break
+
+    if state:
+        validation = False
+
+    return validation
+
+
+def contains_whitespace(string):
+    """Checking if a sring has whitepaces"""
+    if re.search('[\\s]', string):
+        return True
+    return False
+
+
+def is_string(value):
+    if isinstance(value, str):
+        if value.isalpha():
+            return True
+    return False
