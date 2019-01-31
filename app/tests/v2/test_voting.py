@@ -10,6 +10,7 @@ class TestVoting(BaseTest):
         """Test for upvoting a question"""
         result = self.post_question()
         header = {"x-access-token": result[1]}
+        print(result)
 
         with self.client as c:
             upvote_response = c.patch('api/v2/questions/1/upvote',
@@ -25,6 +26,7 @@ class TestVoting(BaseTest):
         """Test for continuous voting"""
         result = self.post_question()
         header = {"x-access-token": result[1]}
+        print(result)
 
         with self.client as c:
             c.patch('api/v2/questions/1/upvote', headers=header)
@@ -35,12 +37,13 @@ class TestVoting(BaseTest):
             print(result)
 
             self.assertEqual(result['error'],
-                             "You can only vote once!")
+                             "You can only upvote once!")
 
     def test_downvote_a_question(self):
         """Test for upvoting a question"""
         result = self.post_question()
         header = {"x-access-token": result[1]}
+        print(result)
 
         with self.client as c:
             upvote_response = c.patch('api/v2/questions/1/downvote',
@@ -56,6 +59,7 @@ class TestVoting(BaseTest):
         """Test for continuous voting"""
         result = self.post_question()
         header = {"x-access-token": result[1]}
+        print(result)
 
         with self.client as c:
             c.patch('api/v2/questions/1/downvote', headers=header)
@@ -66,4 +70,4 @@ class TestVoting(BaseTest):
             print(result)
 
             self.assertEqual(result['error'],
-                             "You can only vote once!")
+                             "You can only downvote once!")
