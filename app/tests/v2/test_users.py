@@ -5,6 +5,7 @@ from app.tests.v2.base_test import BaseTest
 
 class TestUsers(BaseTest):
     """Users Auth test class"""
+
     def test_signup(self):
         """Test for user signup"""
         result = self.sign_up()
@@ -71,11 +72,13 @@ class TestUsers(BaseTest):
             self.assertEqual(result['error'], "firstname is missing.")
 
     def test_login(self):
+        """Test for login"""
         result = self.login()
 
         self.assertEqual(result['message'], "Logged in successfully!")
 
     def test_login_with_non_existent_user(self):
+        """Test for login with a user that has not been signed up"""
         with self.client as c:
             wrong_login_payload = {
                 "email": "nonexistent@user.com",
@@ -89,6 +92,7 @@ class TestUsers(BaseTest):
             result['error'], "No user found with the given credentials")
 
     def test_login_with_wrong_password(self):
+        """Test for a login with a wrong password"""
         self.sign_up()
         with self.client as c:
             wrong_login_password = {
@@ -101,10 +105,11 @@ class TestUsers(BaseTest):
             result = json.loads(response.data.decode('utf-8'))
         print(wrong_login_password['email'])
         self.assertEqual(
-            result['error'], "Email/Password is invalid. Please check your"
+            result['error'], "Password is invalid. Please check your"
             " credentials")
 
     def test_login_invalid_email(self):
+        """Test for login with an invalid email format"""
         self.sign_up()
         with self.client as c:
             wrong_email_format = {
@@ -119,6 +124,7 @@ class TestUsers(BaseTest):
             result['error'], "Email invalid")
 
     def test_token_generation_in_login(self):
+        """Test if a token is being generated after login"""
         self.sign_up()
         result = self.login()
 
