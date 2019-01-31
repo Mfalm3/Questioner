@@ -35,7 +35,8 @@ def create_meetup(logged_user):
         try:
             check_date = happening_on.split('T')[0]
             now = datetime.datetime.now()
-            check_date = datetime.datetime.strptime(check_date, '%Y-%m-%d')
+            check_date = datetime.datetime.strptime(check_date,
+                                                    '%Y-%m-%d %H:%M%p')
             if now > check_date:
                 return jsonify({
                     "status": 400,
