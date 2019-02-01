@@ -27,7 +27,16 @@ class UsersModel(BaseModel):
         hashed = generate_password_hash(password)
         return hashed
 
+    @staticmethod
+    def change_password(user, new_password):
+        """Set a new password"""
+        sql = """
+        UPDATE users SET password = '{}' WHERE user_id = {}
+        """.format(generate_password_hash(new_password), user)
+        database_transactions(sql)
+
     def save(self):
+        """Create a new user"""
         store = """
         INSERT INTO users(firstname, lastname, othername, email,
         password, phoneNumber, username, registered ) VALUES (
@@ -54,6 +63,7 @@ class UsersModel(BaseModel):
 
     @staticmethod
     def logout(token):
+        """Logout a new user"""
         sql = """
         INSERT INTO blacklisted_tokens (blacklisted_token)
         VALUES ('{}')""". format(token)
@@ -62,6 +72,7 @@ class UsersModel(BaseModel):
 
     @staticmethod
     def get_user(email):
+        """Get a user"""
         try:
             sql = "SELECT * FROM users where email = '{}';".format(email)
 
@@ -73,10 +84,10 @@ class UsersModel(BaseModel):
 
     @staticmethod
     def token_blacklisted(token):
-        """"""
+        """Check if a token is blacklisted"""
         sql = """
         SELECT blacklisted_token as token
-        FROM blacklisted_tokens 
+        FROM blacklisted_tokens
         WHERE blacklisted_token = '{}'
         """.format(token)
 
