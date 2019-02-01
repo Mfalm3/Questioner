@@ -22,14 +22,13 @@ def requires_token(route):
             }), 401
 
         try:
-            data = jwt.decode(token, key, algorithms='HS256')
-            logged_user = UsersModel.get_user(data['email'])
+            logged_user = UsersModel.decode_token(token=token)
             if logged_user is False:
                 return jsonify({
-                    "status": 404,
-                    "error": "User with the given credentials was"
-                             " not found in the system"
-                }), 404
+                    "status": 400,
+                    "error": "Cannot Process the request at the moment. "
+                             "Please sign in to continue!"
+                }), 400
         except Exception as e:
             return jsonify({
                 "status": 401,
