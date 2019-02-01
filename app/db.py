@@ -108,16 +108,20 @@ def tables_setup():
              "question_id INTEGER, " \
              "action character varying(10), " \
              "FOREIGN KEY (user_id) REFERENCES users(user_id) " \
-             "ON DELETE CASCADE, " \
+             "ON DELETE CASCADE ON UPDATE CASCADE, " \
              "FOREIGN KEY (question_id) REFERENCES" \
              " meetup_questions(question_id) ON DELETE CASCADE ON"\
              " UPDATE CASCADE)"
 
-    table6 = "CREATE TABLE IF NOT EXISTS rsvps_table ("\
-             "id serial PRIMARY KEY, "\
-             " user_id INTEGER," \
-             " meetup_id INTEGER," \
-             "rsvp_response character varying(5))"
+    table6 = "CREATE TABLE IF NOT EXISTS rsvps_table " \
+             "(id serial PRIMARY KEY, "\
+             "user_id INTEGER, "\
+             "meetup_id integer, "\
+             "rsvp_response character varying (5), "\
+             "FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE "\
+             "CASCADE ON UPDATE CASCADE, "\
+             "FOREIGN KEY (meetup_id) REFERENCES meetups(meetup_id)" \
+             " ON DELETE CASCADE ON UPDATE CASCADE)"
 
     tables.extend([table0, table1, table2, table3, table4, table5, table6])
     return tables
@@ -141,9 +145,10 @@ def tables_tear_down(app):
     questions = " DROP TABLE IF EXISTS meetup_questions CASCADE"
     comments = " DROP TABLE IF EXISTS meetup_questions_comments CASCADE"
     votes = "DROP TABLE IF EXISTS votes_table CASCADE"
+    rsvps = "DROP TABLE IF EXISTS rsvps_table CASCADE"
     blacklisted_token = " DROP TABLE IF EXISTS blacklisted_tokens CASCADE"
     tears.extend([users, meetups, questions, comments, votes,
-                  blacklisted_token])
+                  rsvps, blacklisted_token])
     conn = conn_link(app.config.get('DATABASE_URL'))
     cur = conn.cursor()
     try:

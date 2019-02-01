@@ -53,6 +53,7 @@ class BaseTest(unittest.TestCase):
         return result
 
     def sign_up_non_admin(self):
+        """Sign up a regular user"""
         with self.client as c:
             response = c.post(self.signup_url,
                               json=self.signup_payload1,
@@ -61,6 +62,7 @@ class BaseTest(unittest.TestCase):
         return result
 
     def login(self):
+        """Sign in the admin user"""
         self.sign_up()
         with self.client as c:
             response = c.post(self.signin_url,
@@ -71,6 +73,7 @@ class BaseTest(unittest.TestCase):
         return result
 
     def login_non_admin(self):
+        """Sign in a regular user"""
         self.sign_up_non_admin()
         with self.client as c:
             response = c.post(self.signin_url,
@@ -81,6 +84,7 @@ class BaseTest(unittest.TestCase):
         return result
 
     def create_meetup(self):
+        """Initialize a meetup"""
         self.sign_up()
         signin_result = self.login()
         with self.client as c:
@@ -99,6 +103,7 @@ class BaseTest(unittest.TestCase):
             return result
 
     def post_question(self):
+        """Initialize a question post in a meetup"""
         self.sign_up()
         login_response = self.login()
         result = self.create_meetup()
@@ -122,5 +127,6 @@ class BaseTest(unittest.TestCase):
             return [question_post_response, login_response['token']]
 
     def tearDown(self):
+        """Tear down function called after every test"""
         self.client = None
         tables_tear_down(self.app)

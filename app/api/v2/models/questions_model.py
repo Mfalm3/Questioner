@@ -48,7 +48,7 @@ class QuestionModel(BaseModel):
         GROUP BY action),0)as votes)
         )as question_votes
         FROM meetup_questions WHERE question_id = '{}';
-        """.format(question_id, question_id, question_id)
+        """.format(question_id, question_id)
         data = database_transactions(sql)
         question = data.fetchone()
         if not question:

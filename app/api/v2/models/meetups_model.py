@@ -55,7 +55,8 @@ class MeetupsModel(BaseModel):
         """Get upcoming meetup records."""
         sql = """
        SELECT row_to_json(meets) as meetup
-            FROM (SELECT *,
+            FROM (SELECT *,(SELECT count(*) as attending from rsvps_table
+            WHERE rsvp_response = 'yes' and meetup_id = m.meetup_id),
                  (SELECT coalesce(json_agg(qst), '[]'::json)
                   FROM(SELECT question_id, meetup_id, question_title,
                   question_body, user_id,
@@ -118,3 +119,30 @@ class MeetupsModel(BaseModel):
         if not meetup:
             return False
         return meetup
+
+
+class RsvpModel():
+    """RSVP Model class"""
+
+    def __init__(self, user, meetup, status):
+        """Initialize the rsvp instance"""
+        self.user = user
+        self.meetup = meetup
+        self.status = status
+
+    def save(self):
+        """Save a meetup rsvp"""
+
+        rsvp_exists = """
+        SELECT * FROM rsvps_table WHERE user_id = {} and meetup_id = {}
+        """.format(self.user, self.meetup)
+        has_rsvp = database_transactions(rsvp_exists)
+        if not(has_rsvp).fetchone():
+            sql = """
+            INSERT INTO rsvps_table (user_id, meetup_id, rsvp_response)
+            VALUES({}, '{}', '{}')
+            """.format(self.user, self.meetup, self.status)
+            database_transactions(sql)
+        update_rsvp = """
+        UPDATE rsvps_table SET rsvp_response = '{}'""".format(self.status)
+        database_transactions(update_rsvp)
