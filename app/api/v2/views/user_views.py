@@ -3,10 +3,12 @@ import datetime
 import jwt
 from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
-from app.api.v2.utils.validator import (valid_email, check_if_exists,
-validate_password, contains_whitespace, is_string)
 from app.api.v2.models.users_model import UsersModel
 from instance.config import key as enc_key
+from app.api.v2.utils.validator import (valid_email, check_if_exists,
+                                        validate_password,
+                                        contains_whitespace,
+                                        is_string)
 
 V2_USER_BLUEPRINT = Blueprint('v2_user_blueprint',
                               __name__, url_prefix='/api/v2')
@@ -187,3 +189,20 @@ def login():
             "status": 400,
             "error": str(e)
         }), 400
+
+
+@V2_USER_BLUEPRINT.route('/auth/logout', methods=['POST'])
+def logout():
+    """Log out route."""
+    token = request.headers.get('x-access-token')
+    data = UsersModel.decode_token(token=token)
+    if data is False:
+        return jsonify({
+            "status": 401,
+            "error": "You're  not allowed to acces the resource"
+        }), 401
+    UsersModel.logout(token=token)
+    return jsonify({
+        "status": 200,
+        "message": "Logged out successfully!"
+    }), 200
