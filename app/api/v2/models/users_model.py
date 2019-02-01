@@ -1,8 +1,10 @@
 """ Users Model Class v2"""
 import datetime
+import jwt
 from werkzeug.security import generate_password_hash
 from app.api.v2.models.base_model import BaseModel
 from app.db import database_transactions
+from instance.config import key as enc_key
 
 
 class UsersModel(BaseModel):
@@ -51,6 +53,14 @@ class UsersModel(BaseModel):
         return user
 
     @staticmethod
+    def logout(token):
+        sql = """
+        INSERT INTO blacklisted_tokens (blacklisted_token)
+        VALUES ('{}')""". format(token)
+
+        database_transactions(sql)
+
+    @staticmethod
     def get_user(email):
         try:
             sql = "SELECT * FROM users where email = '{}';".format(email)
@@ -60,3 +70,27 @@ class UsersModel(BaseModel):
             return user
         except Exception as e:
             raise e
+
+    @staticmethod
+    def token_blacklisted(token):
+        """"""
+        sql = """
+        SELECT blacklisted_token as token
+        FROM blacklisted_tokens 
+        WHERE blacklisted_token = '{}'
+        """.format(token)
+
+        blacklist = database_transactions(sql)
+        if blacklist.fetchone():
+            return True
+        return False
+
+    @staticmethod
+    def decode_token(token):
+        """Method to decode authentication token"""
+        if UsersModel.token_blacklisted(token):
+            return False
+
+        data = jwt.decode(token, enc_key, algorithms='HS256')
+        user = UsersModel.get_user(data['email'])
+        return user
