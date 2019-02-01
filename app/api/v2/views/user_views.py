@@ -5,6 +5,7 @@ from flask import Blueprint, request, jsonify
 from werkzeug.security import check_password_hash
 from app.api.v2.models.users_model import UsersModel
 from instance.config import key as enc_key
+from app.api.v2.utils.utils import requires_token
 from app.api.v2.utils.validator import (valid_email, check_if_exists,
                                         validate_password,
                                         contains_whitespace,
@@ -51,7 +52,7 @@ def signup():
         first_name = data.get('firstname')
         last_name = data.get("lastname")
         password = data.get("password")
-        other_name = data.get("othername") or ''
+        other_name = data.get("othername")
         email = data.get("email")
         phone = data.get("phoneNumber")
         username = data.get("username")
@@ -65,6 +66,7 @@ def signup():
             return jsonify({
                 "status": 400,
                 "error": "The password doesn't match our standards!"
+                         "[(a-z)(A-Z)(0-9)(@#$)]"
             }), 400
         if check_if_exists('users', 'username', username):
             return jsonify({
@@ -206,3 +208,35 @@ def logout():
         "status": 200,
         "message": "Logged out successfully!"
     }), 200
+
+
+@V2_USER_BLUEPRINT.route('/auth/password/change', methods=['POST'])
+@requires_token
+def change_password(logged_user):
+    """Change password route."""
+    try:
+        data = request.json
+        for key in data.keys():
+            if 'new_password' not in key:
+                return jsonify({
+                    "status": 400,
+                    "error": "`{}` field is required".format('new_password')
+                })
+        new_password = data.get('new_password')
+        if not validate_password(new_password):
+            return jsonify({
+                "status": 400,
+                "error": "The password doesn't match our standards! "
+                         "[(a-z)(A-Z)(0-9)(@#$)]"
+            }), 400
+        user = logged_user.get('user_id')
+        UsersModel.change_password(user, new_password)
+        return jsonify({
+            "status": 200,
+            "message": "Password updated succesfully"
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": 400,
+            "error": str(e)
+        })
