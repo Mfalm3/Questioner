@@ -1,7 +1,7 @@
 # Meetups Views v2.
 import datetime
 from flask import Blueprint, jsonify, request
-from app.api.v2.models.meetups_model import MeetupsModel
+from app.api.v2.models.meetups_model import MeetupsModel, RsvpModel
 from app.api.v2.models.users_model import UsersModel
 from app.api.v2.utils.validator import is_empty
 from app.api.v2.utils.utils import requires_token
@@ -123,7 +123,6 @@ def delete_meetup(logged_user, meetup_id):
             "message": "Meetup deleted successfully!"
         })
 
-
     except Exception as e:
         return jsonify({
             "status": 400,
@@ -150,3 +149,51 @@ def get_specific_meetup(meetup_id):
             "status": 404,
             "error": "The meetup with the passed id doesn't exist"
         }), 404
+
+
+@V2_MEETUP_BLUEPRINT.route('/meetups/<meetup_id>/rsvps', methods=['POST'])
+@requires_token
+def rsvp_meetup(logged_user, meetup_id):
+    """Rsvp for a meetup route"""
+
+    meetup = meetup_id
+    user = UsersModel.get_user(logged_user['email']).get('user_id')
+    try:
+        data = request.json
+        for key, value in data.items():
+            if "response" not in data.keys():
+                return jsonify({
+                    "status": 400,
+                    "error": "{} is missing.".format(key)
+                }), 400
+            if value.lower() not in ['yes', 'no', 'maybe']:
+                return jsonify({
+                    "status": 400,
+                    "error": "Only `yes`,`no`,`maybe` allowed as responses!"
+                }), 400
+        response = data.get('response')
+        get_meetup = MeetupsModel.get_meetup(meetup)
+        if get_meetup is False:
+            return jsonify({
+                "status": 404,
+                "error": "The meetup with the passed id doesn't exist"
+            }), 404
+        meetup_rsvp = RsvpModel(user=user,
+                                meetup=meetup,
+                                status=response)
+        meetup_rsvp.save()
+        rsvp = {
+            "meetup": meetup,
+            "topic": get_meetup['meetup']['meetup_topic'],
+            "status": response
+        }
+        return jsonify({
+            "status": 201,
+            "data": [rsvp]
+        }), 201
+
+    except Exception as e:
+        return jsonify({
+            "status": 400,
+            "error": str(e)
+        }), 400
