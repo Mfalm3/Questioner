@@ -118,3 +118,22 @@ class MeetupsModel(BaseModel):
         if not meetup:
             return False
         return meetup
+
+
+class RsvpModel():
+    """RSVP Model class"""
+
+    def __init__(self, user, meetup, status):
+        """Initialize the rsvp instance"""
+        self.user = user
+        self.meetup = meetup
+        self.status = status
+
+    def save(self):
+        """Save a meetup rsvp"""
+        sql = """
+        INSERT INTO rsvps_table (user_id, meetup_id, rsvp_response)
+        VALUES({}, '{}', '{}')
+        """.format(self.user, self.meetup, self.status)
+
+        database_transactions(sql)
