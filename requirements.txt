@@ -28,7 +28,7 @@ pluggy==0.8.0
 psycopg2-binary==2.7.6.1
 py==1.7.0
 pycodestyle==2.4.0
-pycparser==2.19
+pycparser==2.20
 PyJWT==1.7.1
 pylint==2.2.2
 pytest==4.1.0
