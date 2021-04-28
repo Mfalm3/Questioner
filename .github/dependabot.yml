@@ -1,0 +1,52 @@
+version: 2
+updates:
+- package-ecosystem: pip
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "02:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: pylint
+    versions:
+    - 2.7.2
+    - 2.7.3
+    - 2.7.4
+    - 2.8.1
+  - dependency-name: python-dotenv
+    versions:
+    - 0.15.0
+    - 0.16.0
+  - dependency-name: isort
+    versions:
+    - 5.7.0
+    - 5.8.0
+  - dependency-name: jinja2
+    versions:
+    - 2.10.1
+    - 2.11.3
+  - dependency-name: pycodestyle
+    versions:
+    - 2.6.0
+    - 2.7.0
+  - dependency-name: astroid
+    versions:
+    - 2.4.2
+    - "2.5"
+    - 2.5.1
+  - dependency-name: more-itertools
+    versions:
+    - 8.6.0
+    - 8.7.0
+  - dependency-name: pytest-cov
+    versions:
+    - 2.11.1
+  - dependency-name: py
+    versions:
+    - 1.10.0
+  - dependency-name: cryptography
+    versions:
+    - "3.2"
+  - dependency-name: urllib3
+    versions:
+    - 1.24.2
